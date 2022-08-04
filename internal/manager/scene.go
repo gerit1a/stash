@@ -122,39 +122,53 @@ func GetSceneStreamPaths(scene *models.Scene, directStreamURL string, maxStreami
 	mp4LabelStandard := "MP4 Standard (480p)" // "STANDARD"
 	mp4LabelLow := "MP4 Low (240p)"           // "LOW"
 
+	hlsLabelLow := "HLS Low (240p)"           // "LOW"
+	hlsLabelStandard := "HLS Standard (480p)" // "STANDARD"
+	hlsLabelStandardHD := "HLS HD (720p)"     // "STANDARD_HD"
+	hlsLabelFullHD := "HLS Full HD (1080p)"   // "FULL_HD"
+	hlsLabelFourK := "HLS 4K (2160p)"         // "FOUR_K"
+	// Setup up lower quality transcoding options (HLS)
 	var webmStreams []*SceneStreamEndpoint
 	var mp4Streams []*SceneStreamEndpoint
+	var hlsStreams []*models.SceneStreamEndpoint
 
 	webmURL := directStreamURL + ".webm"
 	mp4URL := directStreamURL + ".mp4"
+	hlsURL := directStreamURL + ".m3u8"
 
 	if includeSceneStreamPath(scene, models.StreamingResolutionEnumFourK, maxStreamingTranscodeSize) {
 		webmStreams = append(webmStreams, makeStreamEndpoint(webmURL, models.StreamingResolutionEnumFourK, mimeMp4, webmLabelFourK))
 		mp4Streams = append(mp4Streams, makeStreamEndpoint(mp4URL, models.StreamingResolutionEnumFourK, mimeMp4, mp4LabelFourK))
+		hlsStreams = append(hlsStreams, makeStreamEndpoint(hlsURL, models.StreamingResolutionEnumFourK, mimeHLS, hlsLabelFourK))
 	}
 
 	if includeSceneStreamPath(scene, models.StreamingResolutionEnumFullHd, maxStreamingTranscodeSize) {
 		webmStreams = append(webmStreams, makeStreamEndpoint(webmURL, models.StreamingResolutionEnumFullHd, mimeMp4, webmLabelFullHD))
 		mp4Streams = append(mp4Streams, makeStreamEndpoint(mp4URL, models.StreamingResolutionEnumFullHd, mimeMp4, mp4LabelFullHD))
+		hlsStreams = append(hlsStreams, makeStreamEndpoint(hlsURL, models.StreamingResolutionEnumFullHd, mimeHLS, hlsLabelFullHD))
 	}
 
 	if includeSceneStreamPath(scene, models.StreamingResolutionEnumStandardHd, maxStreamingTranscodeSize) {
 		webmStreams = append(webmStreams, makeStreamEndpoint(webmURL, models.StreamingResolutionEnumStandardHd, mimeMp4, webmLabelStandardHD))
 		mp4Streams = append(mp4Streams, makeStreamEndpoint(mp4URL, models.StreamingResolutionEnumStandardHd, mimeMp4, mp4LabelStandardHD))
+		hlsStreams = append(hlsStreams, makeStreamEndpoint(hlsURL, models.StreamingResolutionEnumStandardHd, mimeHLS, hlsLabelStandardHD))
 	}
 
 	if includeSceneStreamPath(scene, models.StreamingResolutionEnumStandard, maxStreamingTranscodeSize) {
 		webmStreams = append(webmStreams, makeStreamEndpoint(webmURL, models.StreamingResolutionEnumStandard, mimeMp4, webmLabelStandard))
 		mp4Streams = append(mp4Streams, makeStreamEndpoint(mp4URL, models.StreamingResolutionEnumStandard, mimeMp4, mp4LabelStandard))
+		hlsStreams = append(hlsStreams, makeStreamEndpoint(hlsURL, models.StreamingResolutionEnumStandard, mimeHLS, hlsLabelStandard))
 	}
 
 	if includeSceneStreamPath(scene, models.StreamingResolutionEnumLow, maxStreamingTranscodeSize) {
 		webmStreams = append(webmStreams, makeStreamEndpoint(webmURL, models.StreamingResolutionEnumLow, mimeMp4, webmLabelLow))
 		mp4Streams = append(mp4Streams, makeStreamEndpoint(mp4URL, models.StreamingResolutionEnumLow, mimeMp4, mp4LabelLow))
+		hlsStreams = append(hlsStreams, makeStreamEndpoint(hlsURL, models.StreamingResolutionEnumLow, mimeHLS, hlsLabelLow))
 	}
 
 	ret = append(ret, webmStreams...)
 	ret = append(ret, mp4Streams...)
+	ret = append(ret, hlsStreams...)
 
 	defaultStreams := []*SceneStreamEndpoint{
 		{
@@ -162,11 +176,16 @@ func GetSceneStreamPaths(scene *models.Scene, directStreamURL string, maxStreami
 			MimeType: &mimeWebm,
 			Label:    &labelWebm,
 		},
+		{
+			URL:      directStreamURL + ".m3u8",
+			MimeType: &mimeHLS,
+			Label:    &labelHLS,
+		},
 	}
 
 	ret = append(ret, defaultStreams...)
 
-	hls := SceneStreamEndpoint{
+	hls := models.SceneStreamEndpoint{
 		URL:      directStreamURL + ".m3u8",
 		MimeType: &mimeHLS,
 		Label:    &labelHLS,
