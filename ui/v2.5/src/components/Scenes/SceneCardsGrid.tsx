@@ -18,6 +18,12 @@ export const SceneCardsGrid: React.FC<ISceneCardsGrid> = ({
   zoomIndex,
   onSelectChange,
 }) => {
+  const [touchPreviewActive, setTouchPreviewActive] = React.useState("");
+  function handleTouchPreview(key: string) {
+    setTouchPreviewActive(key);
+  }
+  const touchEnabled = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
   return (
     <div className="row justify-content-center">
       {scenes.map((scene, index) => (
@@ -32,6 +38,9 @@ export const SceneCardsGrid: React.FC<ISceneCardsGrid> = ({
           onSelectedChanged={(selected: boolean, shiftKey: boolean) =>
             onSelectChange(scene.id, selected, shiftKey)
           }
+          touchEnabled={touchEnabled}
+          isTouchPreviewActive={touchEnabled && touchPreviewActive === scene.id}
+          onTouchPreview={() => handleTouchPreview(scene.id)}
         />
       ))}
     </div>

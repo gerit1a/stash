@@ -8,7 +8,8 @@ import React, {
   useState,
 } from "react";
 import VideoJS, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
-import "videojs-vtt-thumbnails-freetube";
+// import "videojs-vtt-thumbnails-freetube";
+import "./vtt-thumbnails";
 import "videojs-seek-buttons";
 import "videojs-landscape-fullscreen";
 import "./live";
