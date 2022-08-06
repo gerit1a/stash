@@ -60,7 +60,6 @@ export const SceneRecommendationRow: FunctionComponent<IProps> = (
                 queue={queue}
                 index={index}
                 zoomIndex={1}
-                touchEnabled={props.isTouch}
                 isTouchPreviewActive={props.isTouch && touchPreviewActive === scene.id}
                 onTouchPreview={() => handleTouchPreview(scene.id)}
               />

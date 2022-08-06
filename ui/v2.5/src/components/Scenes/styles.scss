@@ -222,22 +222,24 @@ textarea.scene-description {
     }
   }
 
-  &-non-touch:hover,
-  &-non-touch:active {
-    @include scene-card-hover-active;
+  @media (pointer: fine) {
+    &:hover,
+    &:active {
+      @include scene-card-hover-active;
 
-    .scene-specs-overlay,
-    .scene-studio-overlay {
-      opacity: 0;
-      transition: opacity 0.5s;
-    }
+      .scene-specs-overlay,
+      .scene-studio-overlay {
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
 
-    .scene-studio-overlay:hover,
-    .scene-studio-overlay:active,
-    .scene-specs-overlay:hover,
-    .scene-specs-overlay:active {
-      opacity: 0.75;
-      transition: opacity 0.5s;
+      .scene-studio-overlay:hover,
+      .scene-studio-overlay:active,
+      .scene-specs-overlay:hover,
+      .scene-specs-overlay:active {
+        opacity: 0.75;
+        transition: opacity 0.5s;
+      }
     }
   }
 

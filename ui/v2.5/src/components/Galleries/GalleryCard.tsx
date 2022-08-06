@@ -147,7 +147,7 @@ export const GalleryCard: React.FC<IProps> = (props) => {
 
   return (
     <GridCard
-      className={`gallery-card gallery-card-non-touch zoom-${props.zoomIndex}`}
+      className={`gallery-card zoom-${props.zoomIndex}`}
       url={`/galleries/${props.gallery.id}`}
       title={galleryTitle(props.gallery)}
       linkClassName="gallery-card-header"
