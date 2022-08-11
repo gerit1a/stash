@@ -37,6 +37,7 @@ $sceneTabWidth: 450px;
   }
 
   .vjs-big-button-group {
+    pointer-events: none;
     display: none;
     height: 80px;
     justify-content: space-around;
@@ -46,6 +47,7 @@ $sceneTabWidth: 450px;
     width: 100%;
 
     .vjs-button {
+      pointer-events: auto;
       font-size: 4em;
       height: 100%;
       width: 80px;
@@ -95,6 +97,10 @@ $sceneTabWidth: 450px;
 
   // make controls a little more compact on smaller screens
   @media (max-width: 576px) {
+    div.vjs-control-bar::before {
+        height: 5rem;
+      }
+
     .vjs-control-bar {
       .vjs-control:not(.vjs-progress-control) {
         width: 2.5em;
