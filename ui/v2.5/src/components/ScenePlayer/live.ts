@@ -3,6 +3,7 @@ import videojs, { VideoJsPlayer } from "video.js";
 const offset = function (this: VideoJsPlayer) {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const Player = this.constructor as any;
+  const SeekBar = videojs.getComponent("SeekBar") as any;
 
   if (!Player.__super__ || !Player.__super__.__offsetInit) {
     Player.__super__ = {
@@ -74,6 +75,21 @@ const offset = function (this: VideoJsPlayer) {
       }
       return this.duration() - this.currentTime();
     };
+  }
+
+  if (!SeekBar.__super__) {
+    SeekBar.__super__ = {
+      __offsetInit: true,
+      handleMouseMove: SeekBar.prototype.handleMouseMove,
+    };
+
+    // smooth seeking movements
+    SeekBar.prototype.handleMouseMove = function handleMouseMove(event: PointerEvent) {
+      SeekBar.__super__.handleMouseMove.apply(this, arguments)
+      this.update();
+      let currentTime = this.player_.currentTime();
+      this.player_.controlBar.currentTimeDisplay.updateTextNode_(currentTime);
+    }
   }
 };
 
