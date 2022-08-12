@@ -56,6 +56,17 @@ $sceneTabWidth: 450px;
         height: 100%;
         line-height: 80px;
       }
+      
+      &.vjs-seek-button {
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity .5s cubic-bezier(.62,0,.95,.04) 0s;
+
+        &.visible {
+          opacity: 1;
+          transition: opacity .1s ease-in 0s;
+        }
+      }
     }
   }
 
@@ -458,8 +469,20 @@ $sceneTabWidth: 450px;
   }
 }
 
-.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
-  z-index: 1;
+.vjs-menu-button-popup .vjs-menu {
+  @media (max-width: 576px) {
+    left: -5em;
+  }
+
+  .vjs-menu-content {
+    z-index: 1;
+    @media (max-width: 480px) {
+      max-height: 10em;
+    }
+    @media (min-width: 576px) and (max-width: 767px) {
+      max-height: 14em;
+    }
+  }
 }
 
 .vjs-marker {
