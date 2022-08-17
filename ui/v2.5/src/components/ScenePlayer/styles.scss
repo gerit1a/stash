@@ -307,7 +307,7 @@ $sceneTabWidth: 450px;
 
 /* hide scrubber when height is < 450px or width < 576 */
 @media (max-height: 449px), (max-width: 575px) {
-  .scrubber-wrapper {
+  .scrubber-wrapper .scrubber-button {
     display: none;
   }
 }
