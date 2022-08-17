@@ -34,8 +34,14 @@ func (c *StreamRequestContext) Cancel() {
 	conn, bw, _ := hj.Hijack()
 	if conn != nil {
 		// notify end of stream
-		bw.WriteString("0\r\n")
-		bw.WriteString("\r\n")
+		_, err := bw.WriteString("0\r\n")
+		if err != nil {
+			logger.Warnf("unable to write end of stream: %v", err)
+		}
+		_, err = bw.WriteString("\r\n")
+		if err != nil {
+			logger.Warnf("unable to write end of stream: %v", err)
+		}
 		bw.Flush()
 		conn.Close()
 	}
