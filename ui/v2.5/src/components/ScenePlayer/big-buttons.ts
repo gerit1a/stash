@@ -77,10 +77,10 @@ class touchControls extends videojs.getPlugin("plugin") {
 
     if (touchPercent > 0.65) {
       this.displayIcon(this.forwardIconEl);
-      this.player.currentTime(this.player.currentTime() + 5);
+      this.player.currentTime(this.player.currentTime() + 10);
     } else if (touchPercent < 0.35) {
       this.displayIcon(this.backIconEl);
-      this.player.currentTime(Math.max(0, this.player.currentTime() - 5));
+      this.player.currentTime(Math.max(0, this.player.currentTime() - 10));
     }
   }
 
