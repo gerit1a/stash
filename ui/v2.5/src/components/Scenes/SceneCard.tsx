@@ -47,6 +47,18 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
   const videoEl = useRef<HTMLVideoElement>(null);
   const { isTouch } = React.useContext(ConfigurationContext);
 
+  function setVideo(play: boolean) {
+    if (videoEl.current) {
+      if (play) {
+        // Catch is necessary due to DOMException if user hovers before clicking on page
+        videoEl.current.play()?.catch(() => {});
+      } else {
+        videoEl.current.pause();
+        videoEl.current.currentTime = 0;
+      }
+    }
+  }
+
   useEffect(() => {
     if (isTouch) {
       return;
@@ -54,10 +66,9 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Catch is necessary due to DOMException if user hovers before clicking on page
-          videoEl.current?.play()?.catch(() => {});
+          setVideo(true);
         } else {
-          videoEl.current?.pause();
+          setVideo(false);
         }
       });
     });
@@ -74,9 +85,9 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
 
   useEffect(() => {
     if (isTouchPreviewActive) {
-      videoEl.current?.play()?.catch(() => {});
+      setVideo(true);
     } else {
-      videoEl.current?.pause();
+      setVideo(false);
     }
   }, [isTouchPreviewActive]);
 
