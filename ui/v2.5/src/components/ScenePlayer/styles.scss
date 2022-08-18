@@ -47,7 +47,6 @@ $sceneTabWidth: 450px;
     width: 100%;
 
     .vjs-button {
-      pointer-events: auto;
       font-size: 4em;
       height: 100%;
       width: 80px;
@@ -55,6 +54,16 @@ $sceneTabWidth: 450px;
       .vjs-icon-placeholder::before {
         height: 100%;
         line-height: 80px;
+      }
+
+      @at-root {
+        .VideoPlayer .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-big-button-group .vjs-button.vjs-big-play-pause-button {
+          pointer-events: none;
+        }
+      }
+
+      &.vjs-big-play-pause-button {
+        pointer-events: auto;
       }
       
       &.vjs-seek-button {
