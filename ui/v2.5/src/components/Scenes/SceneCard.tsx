@@ -44,59 +44,42 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
   isTouchPreviewActive,
   onTouchPreview,
 }) => {
-  const videoEl = useRef<HTMLVideoElement>(null);
   const { isTouch } = React.useContext(ConfigurationContext);
-
-  function setVideo(play: boolean) {
-    if (videoEl.current) {
-      if (play) {
-        // Catch is necessary due to DOMException if user hovers before clicking on page
-        videoEl.current.play()?.catch(() => {});
-      } else {
-        videoEl.current.pause();
-        videoEl.current.currentTime = 0;
-      }
-    }
-  }
-
-  useEffect(() => {
+  const videoEl = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  function setIsPlayingEvent(state: boolean) {
     if (isTouch) {
       return;
     }
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setVideo(true);
-        } else {
-          setVideo(false);
-        }
-      });
-    });
-
-    if (videoEl.current !== null) {
-      observer.observe(videoEl.current);
-    }
-  });
+    setIsPlaying(state);
+  }
 
   useEffect(() => {
-    if (videoEl?.current?.volume)
+    if (videoEl.current?.volume)
       videoEl.current.volume = soundActive ? 0.05 : 0;
   }, [soundActive]);
 
   useEffect(() => {
     if (isTouchPreviewActive) {
-      setVideo(true);
+      setIsPlaying(true);
     } else {
-      setVideo(false);
+      setIsPlaying(false);
     }
   }, [isTouchPreviewActive]);
 
-  return (
-    <div
-      onTouchStart={onTouchPreview}
-      className={cx("scene-card-preview", { portrait: isPortrait })}
-    >
-      <img className="scene-card-preview-image" src={image} alt="" />
+  useEffect(() => {
+    if (videoEl.current) {
+      // Catch is necessary due to DOMException if user hovers before clicking on page
+      videoEl.current.play()?.catch(() => {});
+    }
+  });
+
+  function maybeRenderVideo(showVideo: boolean) {
+    if (!showVideo) {
+      return;
+    }
+
+    return (
       <video
         disableRemotePlayback
         playsInline
@@ -107,6 +90,19 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
         ref={videoEl}
         src={video}
       />
+    );
+  }
+
+  // conditionally render video prevents issues with too many videos playing on mobile
+  return (
+    <div
+      onTouchStart={onTouchPreview}
+      onMouseEnter={() => setIsPlayingEvent(true)}
+      onMouseLeave={() => setIsPlayingEvent(false)}
+      className={cx("scene-card-preview", { portrait: isPortrait })}
+    >
+      <img className="scene-card-preview-image" src={image} alt="" />
+      {maybeRenderVideo(isPlaying)}
     </div>
   );
 };
