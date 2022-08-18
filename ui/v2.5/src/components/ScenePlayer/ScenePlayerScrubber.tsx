@@ -412,7 +412,6 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
   return (
     <div className="scrubber-wrapper">
       <Button
-        variant="link"
         className="scrubber-button"
         id="scrubber-back"
         onClick={() => goBack()}
