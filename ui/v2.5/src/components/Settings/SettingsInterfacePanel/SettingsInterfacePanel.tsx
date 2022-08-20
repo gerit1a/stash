@@ -131,6 +131,14 @@ export const SettingsInterfacePanel: React.FC = () => {
             onChange={(v) => saveInterface({ menuItems: v })}
           />
         </div>
+
+        <BooleanSetting
+          id="scene-show-title"
+          headingID="config.ui.scene_page_title.heading"
+          subHeadingID="config.ui.scene_page_title.description"
+          checked={iface.sceneShowTitle ?? undefined}
+          onChange={(v) => saveInterface({ sceneShowTitle: v })}
+        />
       </SettingSection>
 
       <SettingSection headingID="config.ui.desktop_integration.desktop_integration">

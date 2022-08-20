@@ -302,6 +302,8 @@ func (r *mutationResolver) ConfigureInterface(ctx context.Context, input ConfigI
 		c.Set(config.MenuItems, input.MenuItems)
 	}
 
+	setBool(config.SceneShowTitle, input.SceneShowTitle)
+
 	setBool(config.SoundOnPreview, input.SoundOnPreview)
 	setBool(config.WallShowTitle, input.WallShowTitle)
 

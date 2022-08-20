@@ -69,6 +69,7 @@ interface IProps {
   collapsed: boolean;
   setCollapsed: (state: boolean) => void;
   setContinuePlaylist: (value: boolean) => void;
+  showSceneTitle: boolean;
 }
 
 const ScenePage: React.FC<IProps> = ({
@@ -88,6 +89,7 @@ const ScenePage: React.FC<IProps> = ({
   collapsed,
   setCollapsed,
   setContinuePlaylist,
+  showSceneTitle,
 }) => {
   const history = useHistory();
   const Toast = useToast();
@@ -217,6 +219,16 @@ const ScenePage: React.FC<IProps> = ({
     setIsDeleteAlertOpen(false);
     if (deleted) {
       history.push("/scenes");
+    }
+  }
+
+  function maybeRenderScenePageTitle() {
+    if (showSceneTitle) {
+      return (
+        <Helmet>
+          <title>{scene.title ?? TextUtils.fileNameFromPath(scene.path)}</title>
+        </Helmet>
+      );
     }
   }
 
@@ -459,6 +471,7 @@ const ScenePage: React.FC<IProps> = ({
       <Helmet>
         <title>{title}</title>
       </Helmet>
+      {maybeRenderScenePageTitle()}
       {maybeRenderSceneGenerateDialog()}
       {maybeRenderDeleteDialog()}
       <div
@@ -514,6 +527,7 @@ const SceneLoader: React.FC = () => {
   const [showScrubber, setShowScrubber] = useState(
     configuration?.interface.showScrubber ?? true
   );
+  const showSceneTitle = configuration?.interface.sceneShowTitle ?? true;
 
   const sceneQueue = useMemo(
     () => SceneQueue.fromQueryParameters(location.search),
@@ -699,6 +713,7 @@ const SceneLoader: React.FC = () => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           setContinuePlaylist={setContinuePlaylist}
+          showSceneTitle={showSceneTitle}
         />
       ) : (
         <div className="scene-tabs" />

@@ -123,7 +123,9 @@ const (
 	CustomUILocation = "custom_ui_location"
 
 	// Interface options
-	MenuItems = "menu_items"
+	MenuItems             = "menu_items"
+	SceneShowTitle        = "scene_show_title"
+	sceneShowTitleDefault = true
 
 	SoundOnPreview = "sound_on_preview"
 
@@ -886,6 +888,10 @@ func (i *Instance) GetMenuItems() []string {
 	return defaultMenuItems
 }
 
+func (i *Instance) GetSceneShowTitle() bool {
+	return i.getBool(SceneShowTitle)
+}
+
 func (i *Instance) GetSoundOnPreview() bool {
 	return i.getBool(SoundOnPreview)
 }
@@ -1360,6 +1366,7 @@ func (i *Instance) setDefaultValues(write bool) error {
 	i.main.SetDefault(PreviewExcludeStart, previewExcludeStartDefault)
 	i.main.SetDefault(PreviewExcludeEnd, previewExcludeEndDefault)
 	i.main.SetDefault(PreviewAudio, previewAudioDefault)
+	i.main.SetDefault(SceneShowTitle, sceneShowTitleDefault)
 	i.main.SetDefault(SoundOnPreview, false)
 
 	i.main.SetDefault(ThemeColor, DefaultThemeColor)

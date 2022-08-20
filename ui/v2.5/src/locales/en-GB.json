@@ -531,6 +531,10 @@
           "show_studio_as_text": "Show Studios as text"
         }
       },
+      "scene_page_title": {
+        "heading": "Show scene page title",
+        "description": "Allow scenes to update the browser page title"
+      },
       "scene_player": {
         "heading": "Scene Player",
         "options": {
