@@ -186,6 +186,12 @@ export const SceneQueryModal: React.FC<IProps> = ({
     );
   }
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.type = "text";
+    }
+  }, [inputRef]);
+
   return (
     <Modal
       show
@@ -204,6 +210,7 @@ export const SceneQueryModal: React.FC<IProps> = ({
       <div className={CLASSNAME}>
         <InputGroup>
           <Form.Control
+            type="password"
             defaultValue={name ?? ""}
             placeholder={`${intl.formatMessage({ id: "name" })}...`}
             className="text-input"

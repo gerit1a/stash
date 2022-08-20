@@ -215,13 +215,18 @@ export const ListFilter: React.FC<IListFilterProps> = ({
       value: "custom",
     });
 
+    useEffect(() => {
+      if (queryRef.current) {
+        queryRef.current.type = "text";
+      }
+    }, [queryRef]);
+
     return (
       <>
         <div className="mb-2 mr-2 d-flex">
           <div className="flex-grow-1 query-text-field-group">
             <FormControl
               type="password"
-              onClick={() => queryRef.current.type = "text"}
               ref={queryRef}
               placeholder={`${intl.formatMessage({ id: "actions.search" })}…`}
               defaultValue={filter.searchTerm}
