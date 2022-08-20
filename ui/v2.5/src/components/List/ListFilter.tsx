@@ -220,6 +220,8 @@ export const ListFilter: React.FC<IListFilterProps> = ({
         <div className="mb-2 mr-2 d-flex">
           <div className="flex-grow-1 query-text-field-group">
             <FormControl
+              type="password"
+              onClick={() => queryRef.current.type = "text"}
               ref={queryRef}
               placeholder={`${intl.formatMessage({ id: "actions.search" })}…`}
               defaultValue={filter.searchTerm}
