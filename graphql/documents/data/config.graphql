@@ -49,7 +49,7 @@ fragment ConfigGeneralData on ConfigGeneralResult {
 
 fragment ConfigInterfaceData on ConfigInterfaceResult {
   menuItems
-  sceneShowTitle
+  enhancedPrivacy
   soundOnPreview
   wallShowTitle
   wallPlayback

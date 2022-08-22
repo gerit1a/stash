@@ -466,6 +466,10 @@
         },
         "heading": "Editing"
       },
+      "enhanced_privacy": {
+        "heading": "Enhanced Privacy",
+        "description": "Prevent sensitive page titles from being displayed in the tab heading and disables keyboard customization"
+      },
       "funscript_offset": {
         "description": "Time offset in milliseconds for interactive scripts playback.",
         "heading": "Funscript Offset (ms)"
@@ -530,10 +534,6 @@
         "options": {
           "show_studio_as_text": "Show Studios as text"
         }
-      },
-      "scene_page_title": {
-        "heading": "Show scene page title",
-        "description": "Allow scenes to update the browser page title"
       },
       "scene_player": {
         "heading": "Scene Player",

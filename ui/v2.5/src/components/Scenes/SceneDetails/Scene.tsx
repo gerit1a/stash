@@ -69,7 +69,7 @@ interface IProps {
   collapsed: boolean;
   setCollapsed: (state: boolean) => void;
   setContinuePlaylist: (value: boolean) => void;
-  showSceneTitle: boolean;
+  enhancedPrivacy: boolean;
 }
 
 const ScenePage: React.FC<IProps> = ({
@@ -89,7 +89,7 @@ const ScenePage: React.FC<IProps> = ({
   collapsed,
   setCollapsed,
   setContinuePlaylist,
-  showSceneTitle,
+  enhancedPrivacy,
 }) => {
   const history = useHistory();
   const Toast = useToast();
@@ -223,7 +223,7 @@ const ScenePage: React.FC<IProps> = ({
   }
 
   function maybeRenderScenePageTitle() {
-    if (showSceneTitle) {
+    if (!enhancedPrivacy) {
       return (
         <Helmet>
           <title>{scene.title ?? TextUtils.fileNameFromPath(scene.path)}</title>
@@ -527,7 +527,7 @@ const SceneLoader: React.FC = () => {
   const [showScrubber, setShowScrubber] = useState(
     configuration?.interface.showScrubber ?? true
   );
-  const showSceneTitle = configuration?.interface.sceneShowTitle ?? true;
+  const enhancedPrivacy = configuration?.interface.enhancedPrivacy ?? false;
 
   const sceneQueue = useMemo(
     () => SceneQueue.fromQueryParameters(location.search),
@@ -713,7 +713,7 @@ const SceneLoader: React.FC = () => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
           setContinuePlaylist={setContinuePlaylist}
-          showSceneTitle={showSceneTitle}
+          enhancedPrivacy={enhancedPrivacy}
         />
       ) : (
         <div className="scene-tabs" />

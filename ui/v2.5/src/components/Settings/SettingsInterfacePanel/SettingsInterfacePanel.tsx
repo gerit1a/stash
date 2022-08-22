@@ -134,10 +134,10 @@ export const SettingsInterfacePanel: React.FC = () => {
 
         <BooleanSetting
           id="scene-show-title"
-          headingID="config.ui.scene_page_title.heading"
-          subHeadingID="config.ui.scene_page_title.description"
-          checked={iface.sceneShowTitle ?? undefined}
-          onChange={(v) => saveInterface({ sceneShowTitle: v })}
+          headingID="config.ui.enhanced_privacy.heading"
+          subHeadingID="config.ui.enhanced_privacy.description"
+          checked={iface.enhancedPrivacy ?? undefined}
+          onChange={(v) => saveInterface({ enhancedPrivacy: v })}
         />
       </SettingSection>
 

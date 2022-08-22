@@ -9,6 +9,7 @@ import {
   TruncatedText,
   Icon,
 } from "src/components/Shared";
+import { ConfigurationContext } from "src/hooks/Config";
 import { queryScrapeSceneQuery } from "src/core/StashService";
 import useToast from "src/hooks/Toast";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -124,6 +125,9 @@ export const SceneQueryModal: React.FC<IProps> = ({
   onHide,
   onSelectScene,
 }) => {
+  const { configuration } = React.useContext(ConfigurationContext);
+  const enhancedPrivacy = configuration?.interface.enhancedPrivacy ?? true;
+
   const CLASSNAME = "SceneScrapeModal";
   const CLASSNAME_LIST = `${CLASSNAME}-list`;
   const CLASSNAME_LIST_CONTAINER = `${CLASSNAME_LIST}-container`;
@@ -210,7 +214,7 @@ export const SceneQueryModal: React.FC<IProps> = ({
       <div className={CLASSNAME}>
         <InputGroup>
           <Form.Control
-            type="password"
+            type={enhancedPrivacy ? "password" : "text"}
             defaultValue={name ?? ""}
             placeholder={`${intl.formatMessage({ id: "name" })}...`}
             className="text-input"
