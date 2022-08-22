@@ -133,7 +133,7 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
   onNext,
   onPrevious,
 }) => {
-  const { configuration } = useContext(ConfigurationContext);
+  const { isTouch, configuration } = useContext(ConfigurationContext);
   const config = configuration?.interface;
   const videoRef = useRef<HTMLVideoElement>(null);
   const playerRef = useRef<VideoJsPlayer | undefined>();
@@ -193,6 +193,7 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
           const player = this as VideoJsPlayer;
           handleHotkeys(player, event);
         },
+        doubleClick: isTouch ? false : true,
       },
     };
 
