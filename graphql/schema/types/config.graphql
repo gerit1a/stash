@@ -267,6 +267,12 @@ input ConfigInterfaceInput {
   """Interface language"""
   language: String
 
+  """Tag View"""
+  showChildTaggedContent: Boolean
+
+  """Studio View"""
+  showChildStudioContent: Boolean
+
   """Slideshow Delay"""
   slideshowDelay: Int @deprecated(reason: "Use imageLightbox.slideshowDelay")
   
@@ -333,6 +339,12 @@ type ConfigInterfaceResult {
   """Interface language"""
   language: String
 
+  """Tag View"""
+  showChildTaggedContent: Boolean
+
+  """Studio View"""
+  showChildStudioContent: Boolean
+  
   """Slideshow Delay"""
   slideshowDelay: Int @deprecated(reason: "Use imageLightbox.slideshowDelay")
 
