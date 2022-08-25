@@ -45,8 +45,12 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
   onTouchPreview,
 }) => {
   const { isTouch } = React.useContext(ConfigurationContext);
+
   const videoEl = useRef<HTMLVideoElement>(null);
+  const previewDiv = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = React.useState(false);
+  const [inViewport, setInViewport] = React.useState(false);
+
   function setIsPlayingEvent(state: boolean) {
     if (isTouch) {
       return;
@@ -74,8 +78,26 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
     }
   });
 
+  // only play when in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setInViewport(
+          entries.some((entry) => {
+            return entry.isIntersecting;
+          })
+        );
+      },
+      isTouch ? { threshold: 0.9 } : { threshold: 0 }
+    );
+
+    if (previewDiv.current !== null) {
+      observer.observe(previewDiv.current);
+    }
+  });
+
   function maybeRenderVideo(showVideo: boolean) {
-    if (!showVideo) {
+    if (!showVideo || !inViewport) {
       return;
     }
 
@@ -89,6 +111,7 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
         preload="none"
         ref={videoEl}
         src={video}
+        poster={image}
       />
     );
   }
@@ -100,6 +123,7 @@ export const ScenePreview: React.FC<IScenePreviewProps> = ({
       onMouseEnter={() => setIsPlayingEvent(true)}
       onMouseLeave={() => setIsPlayingEvent(false)}
       className={cx("scene-card-preview", { portrait: isPortrait })}
+      ref={previewDiv}
     >
       <img className="scene-card-preview-image" src={image} alt="" />
       {maybeRenderVideo(isPlaying)}
