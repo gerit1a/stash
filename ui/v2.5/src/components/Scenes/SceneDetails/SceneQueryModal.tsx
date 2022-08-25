@@ -126,7 +126,7 @@ export const SceneQueryModal: React.FC<IProps> = ({
   onSelectScene,
 }) => {
   const { configuration } = React.useContext(ConfigurationContext);
-  const enhancedPrivacy = configuration?.interface.enhancedPrivacy ?? true;
+  const privacyKeyboardCustomization = configuration?.interface.privacyKeyboardCustomization ?? false;
 
   const CLASSNAME = "SceneScrapeModal";
   const CLASSNAME_LIST = `${CLASSNAME}-list`;
@@ -214,7 +214,7 @@ export const SceneQueryModal: React.FC<IProps> = ({
       <div className={CLASSNAME}>
         <InputGroup>
           <Form.Control
-            type={enhancedPrivacy ? "password" : "text"}
+            type={privacyKeyboardCustomization ? "password" : "text"}
             defaultValue={name ?? ""}
             placeholder={`${intl.formatMessage({ id: "name" })}...`}
             className="text-input"

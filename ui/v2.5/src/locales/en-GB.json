@@ -466,10 +466,6 @@
         },
         "heading": "Editing"
       },
-      "enhanced_privacy": {
-        "heading": "Enhanced Privacy",
-        "description": "Prevent sensitive page titles from being displayed in the tab heading and disables keyboard customization"
-      },
       "funscript_offset": {
         "description": "Time offset in milliseconds for interactive scripts playback.",
         "heading": "Funscript Offset (ms)"
@@ -527,6 +523,17 @@
           "animated": "Animated Image",
           "static": "Static Image",
           "video": "Video"
+        }
+      },
+      "privacy": {
+        "heading": "Privacy",
+        "keyboard_customization": {
+          "heading": "Keyboard Customization",
+          "description": "Disable keyboard personalization on mobile devices"
+        },
+        "show_title": {
+          "heading": "Page Title",
+          "description": "Disable showing sensitive information in page titles"
         }
       },
       "scene_list": {

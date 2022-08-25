@@ -56,7 +56,7 @@ export const ListFilter: React.FC<IListFilterProps> = ({
   persistState,
 }) => {
   const { configuration } = React.useContext(ConfigurationContext);
-  const enhancedPrivacy = configuration?.interface.enhancedPrivacy ?? true;
+  const privacyKeyboardCustomization = configuration?.interface.privacyKeyboardCustomization ?? false;
   const [customPageSizeShowing, setCustomPageSizeShowing] = useState(false);
   const [queryRef, setQueryFocus] = useFocus();
   const [queryClearShowing, setQueryClearShowing] = useState(
@@ -229,7 +229,7 @@ export const ListFilter: React.FC<IListFilterProps> = ({
         <div className="mb-2 mr-2 d-flex">
           <div className="flex-grow-1 query-text-field-group">
             <FormControl
-              type={enhancedPrivacy ? "password" : "text"}
+              type={privacyKeyboardCustomization ? "password" : "text"}
               ref={queryRef}
               placeholder={`${intl.formatMessage({ id: "actions.search" })}…`}
               defaultValue={filter.searchTerm}

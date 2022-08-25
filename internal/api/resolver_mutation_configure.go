@@ -302,7 +302,6 @@ func (r *mutationResolver) ConfigureInterface(ctx context.Context, input ConfigI
 		c.Set(config.MenuItems, input.MenuItems)
 	}
 
-	setBool(config.EnhancedPrivacy, input.EnhancedPrivacy)
 	setBool(config.SoundOnPreview, input.SoundOnPreview)
 	setBool(config.WallShowTitle, input.WallShowTitle)
 
@@ -357,6 +356,9 @@ func (r *mutationResolver) ConfigureInterface(ctx context.Context, input ConfigI
 			c.Set(config.ImageLightboxScrollAttemptsBeforeChange, *options.ScrollAttemptsBeforeChange)
 		}
 	}
+
+	setBool(config.PrivacyKeyboardCustomization, input.PrivacyKeyboardCustomization)
+	setBool(config.PrivacyShowTitle, input.PrivacyShowTitle)
 
 	if input.CSS != nil {
 		c.SetCSS(*input.CSS)

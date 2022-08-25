@@ -243,9 +243,6 @@ input ConfigInterfaceInput {
   """Ordered list of items that should be shown in the menu"""
   menuItems: [String!]
 
-  """Enhanced UI privacy"""
-  enhancedPrivacy: Boolean
-
   """Enable sound on mouseover previews"""
   soundOnPreview: Boolean
   
@@ -268,6 +265,12 @@ input ConfigInterfaceInput {
   
   """If true, studio overlays will be shown as text instead of logo images"""
   showStudioAsText: Boolean
+  
+  """If true, use temporary password field for inputs to prevent autofill"""
+  privacyKeyboardCustomization: Boolean
+
+  """If true, prevent showing scene title in page title"""
+  privacyShowTitle: Boolean
   
   """Custom CSS"""
   css: String
@@ -317,9 +320,6 @@ type ConfigInterfaceResult {
   """Ordered list of items that should be shown in the menu"""
   menuItems: [String!]
 
-  """Enhanced UI privacy"""
-  enhancedPrivacy: Boolean
-
   """Enable sound on mouseover previews"""
   soundOnPreview: Boolean
 
@@ -349,6 +349,12 @@ type ConfigInterfaceResult {
 
   """If true, studio overlays will be shown as text instead of logo images"""
   showStudioAsText: Boolean
+  
+  """If true, use temporary password field for inputs to prevent autofill"""
+  privacyKeyboardCustomization: Boolean
+
+  """If true, prevent showing scene title in page title"""
+  privacyShowTitle: Boolean
 
   """Custom CSS"""
   css: String

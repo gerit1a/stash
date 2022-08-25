@@ -128,7 +128,6 @@ func makeConfigGeneralResult() *ConfigGeneralResult {
 func makeConfigInterfaceResult() *ConfigInterfaceResult {
 	config := config.GetInstance()
 	menuItems := config.GetMenuItems()
-	enhancedPrivacy := config.GetEnhancedPrivacy()
 	soundOnPreview := config.GetSoundOnPreview()
 	wallShowTitle := config.GetWallShowTitle()
 	showScrubber := config.GetShowScrubber()
@@ -141,6 +140,8 @@ func makeConfigInterfaceResult() *ConfigInterfaceResult {
 	autostartVideoOnPlaySelected := config.GetAutostartVideoOnPlaySelected()
 	continuePlaylistDefault := config.GetContinuePlaylistDefault()
 	showStudioAsText := config.GetShowStudioAsText()
+	privacyKeyboardCustomization := config.GetPrivacyKeyboardCustomization()
+	privacyShowTitle := config.GetPrivacyShowTitle()
 	css := config.GetCSS()
 	cssEnabled := config.GetCSSEnabled()
 	customLocales := config.GetCustomLocales()
@@ -156,7 +157,6 @@ func makeConfigInterfaceResult() *ConfigInterfaceResult {
 
 	return &ConfigInterfaceResult{
 		MenuItems:                    menuItems,
-		EnhancedPrivacy:              &enhancedPrivacy,
 		SoundOnPreview:               &soundOnPreview,
 		WallShowTitle:                &wallShowTitle,
 		WallPlayback:                 &wallPlayback,
@@ -169,6 +169,8 @@ func makeConfigInterfaceResult() *ConfigInterfaceResult {
 		ShowStudioAsText:             &showStudioAsText,
 		AutostartVideoOnPlaySelected: &autostartVideoOnPlaySelected,
 		ContinuePlaylistDefault:      &continuePlaylistDefault,
+		PrivacyKeyboardCustomization: &privacyKeyboardCustomization,
+		PrivacyShowTitle:             &privacyShowTitle,
 		CSS:                          &css,
 		CSSEnabled:                   &cssEnabled,
 		CustomLocales:                &customLocales,

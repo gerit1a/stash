@@ -123,9 +123,7 @@ const (
 	CustomUILocation = "custom_ui_location"
 
 	// Interface options
-	MenuItems              = "menu_items"
-	EnhancedPrivacy        = "enhanced_privacy"
-	enhancedPrivacyDefault = false
+	MenuItems = "menu_items"
 
 	SoundOnPreview = "sound_on_preview"
 
@@ -139,6 +137,10 @@ const (
 	autostartVideoOnPlaySelectedDefault = true
 	ContinuePlaylistDefault             = "continue_playlist_default"
 	ShowStudioAsText                    = "show_studio_as_text"
+	PrivacyKeyboardCustomization        = "privacy_keyboard_customization"
+	privacyKeyboardCustomizationDefault = false
+	PrivacyShowTitle                    = "privacy_show_title"
+	privacyShowTitleDefault             = false
 	CSSEnabled                          = "cssEnabled"
 	CustomLocalesEnabled                = "customLocalesEnabled"
 
@@ -888,10 +890,6 @@ func (i *Instance) GetMenuItems() []string {
 	return defaultMenuItems
 }
 
-func (i *Instance) GetEnhancedPrivacy() bool {
-	return i.getBool(EnhancedPrivacy)
-}
-
 func (i *Instance) GetSoundOnPreview() bool {
 	return i.getBool(SoundOnPreview)
 }
@@ -1047,6 +1045,14 @@ func (i *Instance) SetUIConfiguration(v map[string]interface{}) {
 	// HACK: viper changes map keys to case insensitive values, so the workaround is to
 	// convert map keys to snake case for storage
 	i.viper(UI).Set(UI, toSnakeCaseMap(v))
+}
+
+func (i *Instance) GetPrivacyKeyboardCustomization() bool {
+	return i.getBool(PrivacyKeyboardCustomization)
+}
+
+func (i *Instance) GetPrivacyShowTitle() bool {
+	return i.getBool(PrivacyShowTitle)
 }
 
 func (i *Instance) GetCSSPath() string {
@@ -1366,8 +1372,9 @@ func (i *Instance) setDefaultValues(write bool) error {
 	i.main.SetDefault(PreviewExcludeStart, previewExcludeStartDefault)
 	i.main.SetDefault(PreviewExcludeEnd, previewExcludeEndDefault)
 	i.main.SetDefault(PreviewAudio, previewAudioDefault)
-	i.main.SetDefault(EnhancedPrivacy, enhancedPrivacyDefault)
 	i.main.SetDefault(SoundOnPreview, false)
+	i.main.SetDefault(PrivacyKeyboardCustomization, privacyKeyboardCustomizationDefault)
+	i.main.SetDefault(PrivacyShowTitle, privacyShowTitleDefault)
 
 	i.main.SetDefault(ThemeColor, DefaultThemeColor)
 

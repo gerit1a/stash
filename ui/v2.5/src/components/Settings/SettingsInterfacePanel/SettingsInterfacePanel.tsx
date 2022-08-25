@@ -131,14 +131,6 @@ export const SettingsInterfacePanel: React.FC = () => {
             onChange={(v) => saveInterface({ menuItems: v })}
           />
         </div>
-
-        <BooleanSetting
-          id="scene-show-title"
-          headingID="config.ui.enhanced_privacy.heading"
-          subHeadingID="config.ui.enhanced_privacy.description"
-          checked={iface.enhancedPrivacy ?? undefined}
-          onChange={(v) => saveInterface({ enhancedPrivacy: v })}
-        />
       </SettingSection>
 
       <SettingSection headingID="config.ui.desktop_integration.desktop_integration">
@@ -419,6 +411,22 @@ export const SettingsInterfacePanel: React.FC = () => {
             </option>
           ))}
         </SelectSetting>
+      </SettingSection>
+      <SettingSection headingID="config.ui.privacy.heading">
+        <BooleanSetting
+          id="privacy-keyboard-customization"
+          headingID="config.ui.privacy.keyboard_customization.heading"
+          subHeadingID="config.ui.privacy.keyboard_customization.description"
+          checked={iface.privacyKeyboardCustomization ?? undefined}
+          onChange={(v) => saveInterface({ privacyKeyboardCustomization: v })}
+        />
+        <BooleanSetting
+          id="privacy-show-title"
+          headingID="config.ui.privacy.show_title.heading"
+          subHeadingID="config.ui.privacy.show_title.description"
+          checked={iface.privacyShowTitle ?? undefined}
+          onChange={(v) => saveInterface({ privacyShowTitle: v })}
+        />
       </SettingSection>
 
       <SettingSection headingID="config.ui.custom_css.heading">
