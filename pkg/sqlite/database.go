@@ -21,7 +21,7 @@ import (
 	"github.com/stashapp/stash/pkg/logger"
 )
 
-var appSchemaVersion uint = 32
+var appSchemaVersion uint = 33
 
 //go:embed migrations/*.sql
 var migrationsBox embed.FS
@@ -301,7 +301,6 @@ func (db *Database) getDatabaseSchemaVersion() (uint, error) {
 // Migrate the database
 func (db *Database) RunMigrations() error {
 	ctx := context.Background()
-
 	m, err := db.getMigrate()
 	if err != nil {
 		return err

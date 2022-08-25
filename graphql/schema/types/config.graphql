@@ -211,6 +211,16 @@ enum ImageLightboxScrollMode {
   PAN_Y
 }
 
+enum RatingSystem {
+  FiveStar
+  FivePointFiveStar
+  FivePointTwoFiveStar
+  TenStar
+  TenPointFiveStar
+  TenPointTwoFiveStar
+  TenPointDecimal
+}
+
 input ConfigImageLightboxInput {
   slideshowDelay: Int
   displayMode: ImageLightboxDisplayMode
@@ -280,6 +290,9 @@ input ConfigInterfaceInput {
   
   """Set to true to disable creating new objects via the dropdown menus"""
   disableDropdownCreate: ConfigDisableDropdownCreateInput
+
+  """Rating System Type"""
+  ratingSystem: String
   
   """Handy Connection Key"""
   handyKey: String
@@ -308,6 +321,9 @@ type ConfigInterfaceResult {
   wallShowTitle: Boolean
   """Wall playback type"""
   wallPlayback: String
+
+  """Rating System Type"""
+  ratingSystem: String
 
   """Show scene scrubber by default"""
   showScrubber: Boolean
