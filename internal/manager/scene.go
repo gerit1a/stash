@@ -130,7 +130,7 @@ func GetSceneStreamPaths(scene *models.Scene, directStreamURL string, maxStreami
 	// Setup up lower quality transcoding options (HLS)
 	var webmStreams []*SceneStreamEndpoint
 	var mp4Streams []*SceneStreamEndpoint
-	var hlsStreams []*models.SceneStreamEndpoint
+	var hlsStreams []*SceneStreamEndpoint
 
 	webmURL := directStreamURL + ".webm"
 	mp4URL := directStreamURL + ".mp4"
@@ -185,7 +185,7 @@ func GetSceneStreamPaths(scene *models.Scene, directStreamURL string, maxStreami
 
 	ret = append(ret, defaultStreams...)
 
-	hls := models.SceneStreamEndpoint{
+	hls := SceneStreamEndpoint{
 		URL:      directStreamURL + ".m3u8",
 		MimeType: &mimeHLS,
 		Label:    &labelHLS,
