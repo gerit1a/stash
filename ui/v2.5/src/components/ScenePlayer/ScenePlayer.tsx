@@ -8,9 +8,9 @@ import React, {
   useState,
 } from "react";
 import VideoJS, { VideoJsPlayer, VideoJsPlayerOptions } from "video.js";
-import "videojs-vtt-thumbnails-freetube";
+import "./vtt-thumbnails";
 import "videojs-seek-buttons";
-import "./live";
+import "./background-playback-disabler";
 import "./full-screen";
 import "./seek-handler";
 import "./PlaylistButtons";
@@ -164,6 +164,7 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
   );
 
   const maxLoopDuration = config?.maximumLoopDuration ?? 0;
+  const backgroundPlayback = config?.videoBackgroundPlayback ?? true;
 
   const looping = useMemo(
     () =>
@@ -241,7 +242,6 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
     settings.updateDisplay();
 
     (player as any).markers();
-    (player as any).offset();
     player.seekHandler();
     (player as any).sourceSelector();
     (player as any).persistVolume();
@@ -314,67 +314,6 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
   }, [scene, initialTimestamp]);
 
   useEffect(() => {
-    let prevCaptionOffset = 0;
-
-    function addCaptionOffset(player: VideoJsPlayer, offset: number) {
-      const tracks = player.remoteTextTracks();
-      for (let i = 0; i < tracks.length; i++) {
-        const track = tracks[i];
-        const { cues } = track;
-        if (cues) {
-          for (let j = 0; j < cues.length; j++) {
-            const cue = cues[j];
-            cue.startTime = cue.startTime + offset;
-            cue.endTime = cue.endTime + offset;
-          }
-        }
-      }
-    }
-
-    function removeCaptionOffset(player: VideoJsPlayer, offset: number) {
-      const tracks = player.remoteTextTracks();
-      for (let i = 0; i < tracks.length; i++) {
-        const track = tracks[i];
-        const { cues } = track;
-        if (cues) {
-          for (let j = 0; j < cues.length; j++) {
-            const cue = cues[j];
-            cue.startTime = cue.startTime + prevCaptionOffset - offset;
-            cue.endTime = cue.endTime + prevCaptionOffset - offset;
-          }
-        }
-      }
-    }
-
-    function handleOffset(player: VideoJsPlayer) {
-      if (!scene || !file) return;
-
-      const currentSrc = new URL(player.currentSrc());
-
-      const isDirect =
-        currentSrc.pathname.endsWith("/stream") ||
-        currentSrc.pathname.endsWith("/stream.m3u8");
-
-      const curTime = player.currentTime();
-      if (!isDirect) {
-        (player as any).setOffsetDuration(file.duration);
-      } else {
-        (player as any).clearOffsetDuration();
-      }
-
-      if (curTime != prevCaptionOffset) {
-        if (!isDirect) {
-          removeCaptionOffset(player, curTime);
-          prevCaptionOffset = curTime;
-        } else {
-          if (prevCaptionOffset != 0) {
-            addCaptionOffset(player, prevCaptionOffset);
-            prevCaptionOffset = 0;
-          }
-        }
-      }
-    }
-
     function handleError(play: boolean) {
       const player = playerRef.current;
       if (!player) return;
@@ -466,11 +405,6 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
       }
     }
 
-    function loadstart(this: VideoJsPlayer) {
-      // handle offset after loading so that we get the correct current source
-      handleOffset(this);
-    }
-
     function onPlay(this: VideoJsPlayer) {
       this.poster("");
       if (scene?.interactive && interactiveReady.current) {
@@ -522,7 +456,6 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
 
     // always initialise event handlers since these are destroyed when the
     // component is destroyed
-    player.on("loadstart", loadstart);
     player.on("play", onPlay);
     player.on("pause", pause);
     player.on("timeupdate", timeupdate);
@@ -550,10 +483,9 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
       player.fullscreenLock();
     }
 
-    // clear the offset before loading anything new.
-    // otherwise, the offset will be applied to the next file when
-    // currentTime is called.
-    (player as any).clearOffsetDuration();
+    if (!backgroundPlayback) {
+      player.backgroundPlaybackDisabler();
+    }
 
     const tracks = player.remoteTextTracks();
     for (let i = 0; i < tracks.length; i++) {
@@ -608,7 +540,6 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
       // stop the interactive client
       interactiveClient.pause();
 
-      player.off("loadstart", loadstart);
       player.off("play", onPlay);
       player.off("pause", pause);
       player.off("timeupdate", timeupdate);
@@ -621,11 +552,13 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
     scene,
     file,
     config?.autostartVideo,
+    config?.videoBackgroundPlayback,
     looping,
     initialTimestamp,
     autoplay,
     interactiveClient,
     start,
+    backgroundPlayback,
   ]);
 
   useEffect(() => {

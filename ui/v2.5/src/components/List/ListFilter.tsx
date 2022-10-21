@@ -21,6 +21,7 @@ import { Icon } from "src/components/Shared";
 import { ListFilterModel } from "src/models/list-filter/filter";
 import { useFocus } from "src/utils";
 import { ListFilterOptions } from "src/models/list-filter/filter-options";
+import { ConfigurationContext } from "src/hooks/Config";
 import { FormattedMessage, useIntl } from "react-intl";
 import { PersistanceLevel } from "src/hooks/ListHook";
 import { SavedFilterList } from "./SavedFilterList";
@@ -54,6 +55,9 @@ export const ListFilter: React.FC<IListFilterProps> = ({
   openFilterDialog,
   persistState,
 }) => {
+  const { configuration } = React.useContext(ConfigurationContext);
+  const privacyKeyboardCustomization =
+    configuration?.interface.privacyKeyboardCustomization ?? false;
   const [customPageSizeShowing, setCustomPageSizeShowing] = useState(false);
   const [queryRef, setQueryFocus] = useFocus();
   const [queryClearShowing, setQueryClearShowing] = useState(
@@ -191,6 +195,12 @@ export const ListFilter: React.FC<IListFilterProps> = ({
   ));
   SavedFilterDropdown.displayName = "SavedFilterDropdown";
 
+  useEffect(() => {
+    if (queryRef.current) {
+      queryRef.current.type = "text";
+    }
+  }, [queryRef]);
+
   function render() {
     const currentSortBy = filterOptions.sortByOptions.find(
       (o) => o.value === filter.sortBy
@@ -220,6 +230,7 @@ export const ListFilter: React.FC<IListFilterProps> = ({
         <div className="mb-2 mr-2 d-flex">
           <div className="flex-grow-1 query-text-field-group">
             <FormControl
+              type={privacyKeyboardCustomization ? "password" : "text"}
               ref={queryRef}
               placeholder={`${intl.formatMessage({ id: "actions.search" })}…`}
               defaultValue={filter.searchTerm}
