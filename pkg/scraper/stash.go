@@ -325,6 +325,7 @@ func sceneToUpdateInput(scene *models.Scene) models.SceneUpdateInput {
 		Details: &scene.Details,
 		URL:     &scene.URL,
 		Date:    dateToStringPtr(scene.Date),
+		Path:    &scene.Path,
 	}
 }
 

@@ -80,6 +80,7 @@ input SceneUpdateInput {
   details: String
   url: String
   date: String
+  path: String
   rating: Int
   organized: Boolean
   studio_id: ID
