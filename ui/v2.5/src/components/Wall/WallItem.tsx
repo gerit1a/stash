@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import * as GQL from "src/core/generated-graphql";
 import { TextUtils, NavUtils } from "src/utils";
@@ -6,6 +6,7 @@ import cx from "classnames";
 import { SceneQueue } from "src/models/sceneQueue";
 import { ConfigurationContext } from "src/hooks/Config";
 import { markerTitle } from "src/core/markers";
+import debounce from "lodash-es/debounce";
 
 interface IWallItemProps {
   index?: number;
@@ -38,6 +39,17 @@ const Preview: React.FC<{
 
   const previewType = config?.interface?.wallPlayback;
   const soundOnPreview = config?.interface?.soundOnPreview ?? false;
+
+  const previewDiv = useRef<HTMLDivElement>(null);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [debouncedInViewport, setDebouncedInViewport] = useState(false);
+  const debouncedSetInViewport = useMemo(
+    () =>
+      debounce((inViewport: boolean) => {
+        setDebouncedInViewport(inViewport);
+      }, 850),
+    []
+  );
 
   useEffect(() => {
     if (!videoElement.current) return;
@@ -79,27 +91,65 @@ const Preview: React.FC<{
     />
   );
 
-  if (isMissing) {
-    // show the image if the video preview is unavailable
+  // only show video when in viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const inViewport = entries.some((entry) => entry.isIntersecting);
+        if (initialLoad) {
+          setInitialLoad(false);
+          setDebouncedInViewport(inViewport);
+        } else {
+          debouncedSetInViewport(inViewport);
+        }
+      },
+      { threshold: 0 }
+    );
+
+    if (previewDiv.current !== null) {
+      observer.observe(previewDiv.current);
+      return () => {
+        if (previewDiv.current !== null) {
+          observer.unobserve(previewDiv.current);
+        }
+      };
+    }
+  });
+
+  const renderImage = () => {
     if (previews.image) {
       return image;
     }
 
-    return (
-      <div className="wall-item-media wall-item-missing">
-        Pending preview generation
-      </div>
-    );
-  }
+    if (isMissing) {
+      return (
+        <div className="wall-item-media wall-item-missing">
+          Pending preview generation
+        </div>
+      );
+    }
+  };
 
-  if (previewType === "video") {
-    return video;
-  }
+  const maybeRenderVideo = () => {
+    if (!isMissing && debouncedInViewport && previewType === "video") {
+      return video;
+    }
+  };
+
   return (
-    <>
-      {image}
-      {video}
-    </>
+    <div ref={previewDiv} className="wall-item-media">
+      <div
+        className="wall-item-media"
+        style={{
+          position: "absolute",
+          left: 0,
+          height: "100%",
+        }}
+      >
+        {maybeRenderVideo()}
+      </div>
+      <div className="wall-item-media">{renderImage()}</div>
+    </div>
   );
 };
 
