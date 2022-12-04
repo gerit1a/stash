@@ -18,11 +18,12 @@ import (
 type SpriteGenerator struct {
 	Info *generatorInfo
 
+	SpriteRows int
+	SpriteCols int
+
 	VideoChecksum   string
 	ImageOutputPath string
 	VTTOutputPath   string
-	Rows            int
-	Columns         int
 	SlowSeek        bool // use alternate seek function, very slow!
 
 	Overwrite bool
@@ -30,7 +31,7 @@ type SpriteGenerator struct {
 	g *generate.Generator
 }
 
-func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageOutputPath string, vttOutputPath string, rows int, cols int) (*SpriteGenerator, error) {
+func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageOutputPath string, vttOutputPath string, rows int, cols int, minChunkSecond int) (*SpriteGenerator, error) {
 	exists, err := fsutil.FileExists(videoFile.Path)
 	if !exists {
 		return nil, err
@@ -55,6 +56,15 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 				videoFile.FrameCount = fc
 			}
 		}
+	} else {
+		// check if we need to increase chunk count
+		videoFileChunkCount := int(math.Floor(videoFile.Duration / float64(minChunkSecond)))
+		if videoFileChunkCount > chunkCount {
+			logger.Infof("[generator] video %s too long (%.3fs), increasing sprite chunk count from %d to %d", videoFile.Path, videoFile.Duration, chunkCount, videoFileChunkCount)
+			chunkCount = videoFileChunkCount
+			// keep cols the same but increase rows to handle the increased chunk count
+			rows = int(math.Ceil(float64(chunkCount) / float64(cols)))
+		}
 	}
 
 	generator, err := newGeneratorInfo(videoFile)
@@ -71,9 +81,9 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 		VideoChecksum:   videoChecksum,
 		ImageOutputPath: imageOutputPath,
 		VTTOutputPath:   vttOutputPath,
-		Rows:            rows,
 		SlowSeek:        slowSeek,
-		Columns:         cols,
+		SpriteRows:      rows,
+		SpriteCols:      cols,
 		g: &generate.Generator{
 			Encoder:     instance.FFMPEG,
 			LockManager: instance.ReadLockManager,
@@ -138,7 +148,7 @@ func (g *SpriteGenerator) generateSpriteImage() error {
 		return fmt.Errorf("images slice is empty, failed to generate sprite images for %s", g.Info.VideoFile.Path)
 	}
 
-	return imaging.Save(g.g.CombineSpriteImages(images), g.ImageOutputPath)
+	return imaging.Save(g.g.CombineSpriteImages(images, g.SpriteRows, g.SpriteCols), g.ImageOutputPath)
 }
 
 func (g *SpriteGenerator) generateSpriteVTT() error {
@@ -157,7 +167,7 @@ func (g *SpriteGenerator) generateSpriteVTT() error {
 		stepSize /= g.Info.FrameRate
 	}
 
-	return g.g.SpriteVTT(context.TODO(), g.VTTOutputPath, g.ImageOutputPath, stepSize)
+	return g.g.SpriteVTT(context.TODO(), g.VTTOutputPath, g.ImageOutputPath, stepSize, g.SpriteRows, g.SpriteCols, g.Info.ChunkCount)
 }
 
 func (g *SpriteGenerator) imageExists() bool {
