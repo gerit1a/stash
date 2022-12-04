@@ -117,6 +117,7 @@ func (g *SpriteGenerator) generateSpriteImage() error {
 		for i := 0; i < g.Info.ChunkCount; i++ {
 			time := float64(i) * stepSize
 
+			logger.Debugf("[generator] generating sprite image for %s at time %.3f, %d of %d", g.Info.VideoFile.Path, time, i+1, g.Info.ChunkCount)
 			img, err := g.g.SpriteScreenshot(context.TODO(), g.Info.VideoFile.Path, time)
 			if err != nil {
 				return err
