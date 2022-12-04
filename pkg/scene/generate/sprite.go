@@ -15,6 +15,7 @@ import (
 	"github.com/stashapp/stash/pkg/ffmpeg"
 	"github.com/stashapp/stash/pkg/ffmpeg/transcoder"
 	"github.com/stashapp/stash/pkg/fsutil"
+	"github.com/stashapp/stash/pkg/logger"
 	"github.com/stashapp/stash/pkg/utils"
 )
 
@@ -73,7 +74,9 @@ func (g Generator) CombineSpriteImages(images []image.Image, spriteRows int, spr
 	canvasWidth := width * spriteCols
 	canvasHeight := height * spriteRows
 	montage := imaging.New(canvasWidth, canvasHeight, color.NRGBA{})
-	for index := 0; index < len(images); index++ {
+	numImages := len(images)
+	for index := 0; index < numImages; index++ {
+		logger.Debugf("[sprite] Adding image %d of %d to sprite", index+1, numImages)
 		x := width * (index % spriteCols)
 		y := height * (int(math.Floor(float64(index) / float64(spriteCols))))
 		img := images[index]

@@ -62,7 +62,8 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 		if videoFileChunkCount > chunkCount {
 			logger.Infof("[generator] video %s too long (%.3fs), increasing sprite chunk count from %d to %d", videoFile.Path, videoFile.Duration, chunkCount, videoFileChunkCount)
 			chunkCount = videoFileChunkCount
-			// keep cols the same but increase rows to handle the increased chunk count
+			// create a square sprite
+			cols = int(math.Ceil(math.Sqrt(float64(chunkCount))))
 			rows = int(math.Ceil(float64(chunkCount) / float64(cols)))
 		}
 	}
