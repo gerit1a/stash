@@ -84,6 +84,7 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
   const lastTouchEvent = useRef<TouchEvent | null>(null);
   const startTouchEvent = useRef<TouchEvent | null>(null);
   const touchVelocity = useRef(0);
+  const [spriteHeight, setSpriteHeight] = useState(0);
 
   const _position = useRef(0);
   const getPosition = useCallback(() => _position.current, []);
@@ -131,7 +132,10 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
   useEffect(() => {
     if (!props.scene.paths.vtt) return;
     fetchSpriteInfo(props.scene.paths.vtt).then((sprites) => {
-      if (sprites) setSpriteItems(sprites);
+      if (sprites) {
+        setSpriteItems(sprites);
+        setSpriteHeight(sprites[0].h + 30);
+      }
     });
   }, [props.scene]);
 
@@ -434,7 +438,7 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
   }
 
   return (
-    <div className="scrubber-wrapper">
+    <div className="scrubber-wrapper" style={{ height: spriteHeight }}>
       <Button
         className="scrubber-button"
         id="scrubber-back"
@@ -442,7 +446,11 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
       >
         &lt;
       </Button>
-      <div ref={contentEl} className="scrubber-content">
+      <div
+        ref={contentEl}
+        className="scrubber-content"
+        style={{ height: spriteHeight }}
+      >
         <div className="scrubber-tags-background" />
         <div ref={positionIndicatorEl} id="scrubber-position-indicator" />
         <div id="scrubber-current-position" />
