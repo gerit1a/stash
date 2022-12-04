@@ -529,7 +529,7 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
     else
       (player as any).vttThumbnails({
         src: scene?.paths.vtt,
-        showTimestamp: true,
+        showTimestamp: false,
       });
 
     setReady(true);

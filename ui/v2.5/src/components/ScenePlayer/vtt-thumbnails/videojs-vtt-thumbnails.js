@@ -111,6 +111,7 @@ class vttThumbnailsPlugin {
     delete this.progressBar;
     delete this.vttData;
     delete this.thumbnailHolder;
+    delete this.timestampHolder;
     delete this.lastStyle;
   }
 
@@ -189,17 +190,22 @@ class vttThumbnailsPlugin {
     let mouseDisplay = null;
 
     if (!this.options.showTimestamp) {
-      mouseDisplay = this.player.$('.vjs-mouse-display');
+      mouseDisplay = this.player.$('.vjs-time-tooltip');
     }
 
     // eslint-disable-next-line no-undef
     const thumbHolder = document.createElement('div');
 
     thumbHolder.setAttribute('class', 'vjs-vtt-thumbnail-display');
+    const timestampHolder = document.createElement("div");
+    timestampHolder.setAttribute("class", "vjs-vtt-timestamp-display");
+
     this.progressBar = this.player.$('.vjs-progress-control');
     this.progressBarHolder = this.player.$('.vjs-progress-holder');
+    thumbHolder.appendChild(timestampHolder);
     this.progressBar.parentNode.appendChild(thumbHolder);
     this.thumbnailHolder = thumbHolder;
+    this.timestampHolder = timestampHolder;
 
     if (mouseDisplay && !this.options.showTimestamp) {
       mouseDisplay.classList.add('vjs-hidden');
@@ -220,7 +226,7 @@ class vttThumbnailsPlugin {
     this.progressBarHolder.addEventListener('touchend', this.registeredEvents.progressBarMouseLeave);
 
     this.progressBar.addEventListener('mouseenter', this.registeredEvents.progressBarMouseEnter);
-    this.progressBar.addEventListener('mouseleave', this.registeredEvents.progressBarMouseLeave);    
+    this.progressBar.addEventListener('mouseleave', this.registeredEvents.progressBarMouseLeave);
   }
 
   onBarMouseenter() {
@@ -259,6 +265,31 @@ class vttThumbnailsPlugin {
       videojs.dom.getPointerPosition(this.progressBar, event).x,
       this.progressBar.offsetWidth
     );
+  }
+
+  // pretty print timestamp from seconds in the format 00:00:00
+  prettyPrintTimestamp(seconds) {
+    // Round the number of seconds
+    seconds = Math.round(seconds);
+
+    // Calculate the hours, minutes, and seconds
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    // Format the time string
+    let timeString = "";
+    if (hours > 0) {
+      timeString += hours.toString() + ":";
+    }
+    timeString += minutes.toString() + ":";
+    if (secs < 10) {
+      timeString += "0";
+    }
+    timeString += secs.toString();
+
+    // Return the time string
+    return timeString;
   }
 
   getStyleForTime(time) {
@@ -306,6 +337,7 @@ class vttThumbnailsPlugin {
       this.showThumbnailHolder();
     }
 
+    this.timestampHolder.textContent = this.prettyPrintTimestamp(time);
     const xPos = percent * width;
     const thumbnailWidth = parseInt(currentStyle.width, 10);
     const halfthumbnailWidth = thumbnailWidth >> 1;
