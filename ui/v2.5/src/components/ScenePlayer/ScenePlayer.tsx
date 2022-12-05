@@ -486,12 +486,12 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
     if (!auto && scene.paths?.screenshot) player.poster(scene.paths.screenshot);
     else player.poster("");
 
-    const isPortrait =
+    const isLandscape =
       scene.file.height &&
       scene.file.width &&
-      scene.file.height > scene.file.width;
+      scene.file.width > scene.file.height;
 
-    if (!isPortrait) {
+    if (isLandscape) {
       player.fullscreenLock();
     }
 
