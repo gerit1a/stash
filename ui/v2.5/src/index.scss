@@ -47,9 +47,15 @@ body {
 
   @include media-breakpoint-down(xs) {
     @media (orientation: portrait) {
-      padding: 1rem 0 5rem;
+      padding-top: 0;
+      padding-right: 0;
+      padding-bottom: 5rem;
     }
   }
+}
+
+.main.container-fluid {
+  overflow-y: scroll;
 }
 
 code,
@@ -659,8 +665,14 @@ div.dropdown-menu {
   white-space: "pre-wrap";
 }
 
-.btn-toolbar .form-control {
-  width: inherit;
+.btn-toolbar {
+  @media (max-width: 576px) {
+    padding-top: 1rem;
+  }
+
+  .form-control {
+    width: inherit;
+  }
 }
 
 .stats {
