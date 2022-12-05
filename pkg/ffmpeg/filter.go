@@ -24,6 +24,10 @@ func (f VideoFilter) ScaleHeight(h int) VideoFilter {
 	return f.ScaleDimensions(-2, h)
 }
 
+func (f VideoFilter) ScaleFixDarSar() VideoFilter {
+	return f.Append("scale=iw*sar:ih")
+}
+
 // ScaleDimesions returns a VideoFilter scaling using w and h. Use -n to maintain aspect ratio and maintain as multiple of n.
 func (f VideoFilter) ScaleDimensions(w, h int) VideoFilter {
 	return f.Append(fmt.Sprintf("scale=%v:%v", w, h))
