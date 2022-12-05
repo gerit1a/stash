@@ -13,6 +13,7 @@ type GenerateSpriteTask struct {
 	Scene               models.Scene
 	Overwrite           bool
 	fileNamingAlgorithm models.HashAlgorithm
+	Options             models.GenerateSpriteOptions
 }
 
 func (t *GenerateSpriteTask) GetDescription() string {
@@ -34,7 +35,7 @@ func (t *GenerateSpriteTask) Start(ctx context.Context) {
 	sceneHash := t.Scene.GetHash(t.fileNamingAlgorithm)
 	imagePath := instance.Paths.Scene.GetSpriteImageFilePath(sceneHash)
 	vttPath := instance.Paths.Scene.GetSpriteVttFilePath(sceneHash)
-	generator, err := NewSpriteGenerator(*videoFile, sceneHash, imagePath, vttPath, 9, 9, 5)
+	generator, err := NewSpriteGenerator(*videoFile, sceneHash, imagePath, vttPath, t.Options)
 
 	if err != nil {
 		logger.Errorf("error creating sprite generator: %s", err.Error())

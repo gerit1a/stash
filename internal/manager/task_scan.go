@@ -394,10 +394,13 @@ func (g *sceneGenerators) Generate(ctx context.Context, s *models.Scene, f *file
 	if t.ScanGenerateSprites {
 		progress.AddTotal(1)
 		g.taskQueue.Add(fmt.Sprintf("Generating sprites for %s", path), func(ctx context.Context) {
+			options := getGenerateSpriteOptions(models.GenerateSpriteOptionsInput{})
+
 			taskSprite := GenerateSpriteTask{
 				Scene:               *s,
 				Overwrite:           overwrite,
 				fileNamingAlgorithm: fileNamingAlgorithm,
+				Options:             options,
 			}
 			taskSprite.Start(ctx)
 			progress.Increment()

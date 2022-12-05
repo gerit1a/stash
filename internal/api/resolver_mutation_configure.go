@@ -180,6 +180,19 @@ func (r *mutationResolver) ConfigureGeneral(ctx context.Context, input ConfigGen
 		c.Set(config.PreviewPreset, input.PreviewPreset.String())
 	}
 
+	if input.SpriteWidthPxLandscape != nil {
+		c.Set(config.SpriteWidthPxLandscape, *input.SpriteWidthPxLandscape)
+	}
+	if input.SpriteWidthPxPortrait != nil {
+		c.Set(config.SpriteWidthPxPortrait, *input.SpriteWidthPxPortrait)
+	}
+	if input.SpriteChunkIntervalSeconds != nil {
+		c.Set(config.SpriteChunkIntervalSeconds, *input.SpriteChunkIntervalSeconds)
+	}
+	if input.SpriteChunkMinimum != nil {
+		c.Set(config.SpriteChunkMinimum, *input.SpriteChunkMinimum)
+	}
+
 	if input.MaxTranscodeSize != nil {
 		c.Set(config.MaxTranscodeSize, input.MaxTranscodeSize.String())
 	}

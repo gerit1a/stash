@@ -12,14 +12,16 @@ import (
 	"github.com/stashapp/stash/pkg/ffmpeg"
 	"github.com/stashapp/stash/pkg/fsutil"
 	"github.com/stashapp/stash/pkg/logger"
+	"github.com/stashapp/stash/pkg/models"
 	"github.com/stashapp/stash/pkg/scene/generate"
 )
 
 type SpriteGenerator struct {
 	Info *generatorInfo
 
-	SpriteRows int
-	SpriteCols int
+	SpriteRows  int
+	SpriteCols  int
+	SpriteWidth int
 
 	VideoChecksum   string
 	ImageOutputPath string
@@ -31,13 +33,24 @@ type SpriteGenerator struct {
 	g *generate.Generator
 }
 
-func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageOutputPath string, vttOutputPath string, rows int, cols int, minChunkSecond int) (*SpriteGenerator, error) {
+func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageOutputPath string, vttOutputPath string, options models.GenerateSpriteOptions) (*SpriteGenerator, error) {
 	exists, err := fsutil.FileExists(videoFile.Path)
 	if !exists {
 		return nil, err
 	}
 	slowSeek := false
-	chunkCount := rows * cols
+	chunkCount := int(math.Floor(videoFile.Duration / float64(*options.SpriteChunkIntervalSeconds)))
+	if chunkCount < *options.SpriteChunkMinimum {
+		chunkCount = *options.SpriteChunkMinimum
+	}
+	cols := int(math.Ceil(math.Sqrt(float64(chunkCount))))
+	rows := int(math.Ceil(float64(chunkCount) / float64(cols)))
+
+	isPortraitVideo := videoFile.Height > videoFile.Width
+	width := *options.SpriteWidthPxLandscape
+	if isPortraitVideo {
+		width = *options.SpriteWidthPxPortrait
+	}
 
 	// For files with small duration / low frame count  try to seek using frame number intead of seconds
 	if videoFile.Duration < 5 || (0 < videoFile.FrameCount && videoFile.FrameCount <= int64(chunkCount)) { // some files can have FrameCount == 0, only use SlowSeek  if duration < 5
@@ -55,16 +68,6 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 				logger.Warnf("[generator] updating framecount (%d) for %s with read frames count (%d)", videoFile.FrameCount, videoFile.Path, fc)
 				videoFile.FrameCount = fc
 			}
-		}
-	} else {
-		// check if we need to increase chunk count
-		videoFileChunkCount := int(math.Floor(videoFile.Duration / float64(minChunkSecond)))
-		if videoFileChunkCount > chunkCount {
-			logger.Infof("[generator] video %s too long (%.3fs), increasing sprite chunk count from %d to %d", videoFile.Path, videoFile.Duration, chunkCount, videoFileChunkCount)
-			chunkCount = videoFileChunkCount
-			// create a square sprite
-			cols = int(math.Ceil(math.Sqrt(float64(chunkCount))))
-			rows = int(math.Ceil(float64(chunkCount) / float64(cols)))
 		}
 	}
 
@@ -85,6 +88,7 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 		SlowSeek:        slowSeek,
 		SpriteRows:      rows,
 		SpriteCols:      cols,
+		SpriteWidth:     width,
 		g: &generate.Generator{
 			Encoder:     instance.FFMPEG,
 			LockManager: instance.ReadLockManager,
@@ -111,7 +115,7 @@ func (g *SpriteGenerator) generateSpriteImage() error {
 	var images []image.Image
 
 	if !g.SlowSeek {
-		logger.Infof("[generator] generating sprite image for %s", g.Info.VideoFile.Path)
+		logger.Infof("[generator] generating sprite image for %s, %d chunks, %d width, %d rows, %d cols", g.Info.VideoFile.Path, g.Info.ChunkCount, g.SpriteWidth, g.SpriteRows, g.SpriteCols)
 		// generate `ChunkCount` thumbnails
 		stepSize := g.Info.VideoFile.Duration / float64(g.Info.ChunkCount)
 
@@ -119,14 +123,14 @@ func (g *SpriteGenerator) generateSpriteImage() error {
 			time := float64(i) * stepSize
 
 			logger.Debugf("[generator] generating sprite image for %s at time %.3f, %d of %d", g.Info.VideoFile.Path, time, i+1, g.Info.ChunkCount)
-			img, err := g.g.SpriteScreenshot(context.TODO(), g.Info.VideoFile.Path, time)
+			img, err := g.g.SpriteScreenshot(context.TODO(), g.Info.VideoFile.Path, time, g.SpriteWidth)
 			if err != nil {
 				return err
 			}
 			images = append(images, img)
 		}
 	} else {
-		logger.Infof("[generator] generating sprite image for %s (%d frames)", g.Info.VideoFile.Path, g.Info.VideoFile.FrameCount)
+		logger.Infof("[generator] generating sprite image for %s (%d frames), %d chunks, %d width, %d rows, %d cols", g.Info.VideoFile.Path, g.Info.VideoFile.FrameCount, g.SpriteWidth, g.SpriteRows, g.SpriteCols)
 
 		stepFrame := float64(g.Info.VideoFile.FrameCount-1) / float64(g.Info.ChunkCount)
 
@@ -137,7 +141,7 @@ func (g *SpriteGenerator) generateSpriteImage() error {
 				return errors.New("invalid frame number conversion")
 			}
 
-			img, err := g.g.SpriteScreenshotSlow(context.TODO(), g.Info.VideoFile.Path, int(frame))
+			img, err := g.g.SpriteScreenshotSlow(context.TODO(), g.Info.VideoFile.Path, int(frame), g.SpriteWidth)
 			if err != nil {
 				return err
 			}

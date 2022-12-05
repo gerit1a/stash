@@ -80,6 +80,15 @@ const (
 	PreviewExcludeEnd        = "preview_exclude_end"
 	previewExcludeEndDefault = "0"
 
+	SpriteWidthPxLandscape            = "sprite_width_px_landscape"
+	spriteWidthPxLandscapeDefault     = 160
+	SpriteWidthPxPortrait             = "sprite_width_px_portrait"
+	spriteWidthPxPortraitDefault      = 80
+	SpriteChunkIntervalSeconds        = "sprite_chunk_interval_seconds"
+	spriteChunkIntervalSecondsDefault = 10
+	SpriteChunkMinimum                = "sprite_chunk_minimum"
+	spriteChunkMinimumDefault         = 25
+
 	WriteImageThumbnails        = "write_image_thumbnails"
 	writeImageThumbnailsDefault = true
 
@@ -763,6 +772,26 @@ func (i *Instance) GetPreviewPreset() models.PreviewPreset {
 	return models.PreviewPreset(ret)
 }
 
+// GetSpriteWidthPxLandscape returns the width of the sprite in pixels in landscape orientation.
+func (i *Instance) GetSpriteWidthPxLandscape() int {
+	return i.getInt(SpriteWidthPxLandscape)
+}
+
+// GetSpriteWidthPxPortrait returns the width of the sprite in pixels in portrait orientation.
+func (i *Instance) GetSpriteWidthPxPortrait() int {
+	return i.getInt(SpriteWidthPxPortrait)
+}
+
+// GetSpriteChunkIntervalSeconds returns the interval in seconds between sprite chunks.
+func (i *Instance) GetSpriteChunkIntervalSeconds() int {
+	return i.getInt(SpriteChunkIntervalSeconds)
+}
+
+// GetSpriteChunkMinimum returns the minimum number of sprite chunks.
+func (i *Instance) GetSpriteChunkMinimum() int {
+	return i.getInt(SpriteChunkMinimum)
+}
+
 func (i *Instance) GetMaxTranscodeSize() models.StreamingResolutionEnum {
 	ret := i.getString(MaxTranscodeSize)
 
@@ -1368,6 +1397,12 @@ func (i *Instance) setDefaultValues(write bool) error {
 	i.main.SetDefault(PreviewExcludeStart, previewExcludeStartDefault)
 	i.main.SetDefault(PreviewExcludeEnd, previewExcludeEndDefault)
 	i.main.SetDefault(PreviewAudio, previewAudioDefault)
+
+	i.main.SetDefault(SpriteWidthPxLandscape, spriteWidthPxLandscapeDefault)
+	i.main.SetDefault(SpriteWidthPxPortrait, spriteWidthPxPortraitDefault)
+	i.main.SetDefault(SpriteChunkIntervalSeconds, spriteChunkIntervalSecondsDefault)
+	i.main.SetDefault(SpriteChunkMinimum, spriteChunkMinimumDefault)
+
 	i.main.SetDefault(SoundOnPreview, false)
 	i.main.SetDefault(PrivacyKeyboardCustomization, privacyKeyboardCustomizationDefault)
 	i.main.SetDefault(PrivacyShowTitle, privacyShowTitleDefault)

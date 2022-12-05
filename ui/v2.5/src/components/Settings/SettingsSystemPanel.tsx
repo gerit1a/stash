@@ -14,6 +14,10 @@ import {
   VideoPreviewInput,
   VideoPreviewSettingsInput,
 } from "./GeneratePreviewOptions";
+import {
+  SpriteGenerationInput,
+  SpriteGenerationSettingsInput,
+} from "./GenerateSpriteOptions";
 
 export const SettingsConfigurationPanel: React.FC = () => {
   const { general, loading, error, saveGeneral } = React.useContext(
@@ -278,6 +282,26 @@ export const SettingsConfigurationPanel: React.FC = () => {
           onChange={(v) => saveGeneral(v)}
           renderField={(value, setValue) => (
             <VideoPreviewInput value={value ?? {}} setValue={setValue} />
+          )}
+          renderValue={() => {
+            return <></>;
+          }}
+        />
+      </SettingSection>
+
+      <SettingSection headingID="config.general.sprite_generation">
+        <ModalSetting<SpriteGenerationSettingsInput>
+          id="sprite-generation-settings"
+          headingID="dialogs.scene_gen.sprite_generation.sprite_generation_heading"
+          value={{
+            spriteWidthPxLandscape: general.spriteWidthPxLandscape,
+            spriteWidthPxPortrait: general.spriteWidthPxPortrait,
+            spriteChunkIntervalSeconds: general.spriteChunkIntervalSeconds,
+            spriteChunkMinimum: general.spriteChunkMinimum,
+          }}
+          onChange={(v) => saveGeneral(v)}
+          renderField={(value, setValue) => (
+            <SpriteGenerationInput value={value ?? {}} setValue={setValue} />
           )}
           renderValue={() => {
             return <></>;

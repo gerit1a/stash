@@ -5,6 +5,7 @@ input GenerateMetadataInput {
   previews: Boolean
   imagePreviews: Boolean
   previewOptions: GeneratePreviewOptionsInput
+  spriteOptions: GenerateSpriteOptionsInput
   markers: Boolean
   markerImagePreviews: Boolean
   markerScreenshots: Boolean
@@ -36,11 +37,23 @@ input GeneratePreviewOptionsInput {
   previewPreset: PreviewPreset
 }
 
+input GenerateSpriteOptionsInput {
+  """Width of sprites generated in pixels for landscape scenes"""
+  spriteWidthPxLandscape: Int
+  """Width of sprites generated in pixels for portrait scenes"""
+  spriteWidthPxPortrait: Int
+  """Time interval in seconds between each sprite generated"""
+  spriteChunkIntervalSeconds: Int
+  """Minimum number of sprites to generate"""
+  spriteChunkMinimum: Int
+}
+
 type GenerateMetadataOptions {
   sprites: Boolean
   previews: Boolean
   imagePreviews: Boolean
   previewOptions: GeneratePreviewOptions
+  spriteOptions: GenerateSpriteOptions
   markers: Boolean
   markerImagePreviews: Boolean
   markerScreenshots: Boolean
@@ -60,6 +73,17 @@ type GeneratePreviewOptions {
   previewExcludeEnd: String
   """Preset when generating preview"""
   previewPreset: PreviewPreset
+}
+
+type GenerateSpriteOptions {
+  """Width of sprites generated in pixels for landscape scenes"""
+  spriteWidthPxLandscape: Int
+  """Width of sprites generated in pixels for portrait scenes"""
+  spriteWidthPxPortrait: Int
+  """Time interval in seconds between each sprite generated"""
+  spriteChunkIntervalSeconds: Int
+  """Minimum number of sprites to generate"""
+  spriteChunkMinimum: Int
 }
 
 "Filter options for meta data scannning"
@@ -118,7 +142,7 @@ type ScanMetadataOptions {
 
 input CleanMetadataInput {
   paths: [String!]
-  
+
   """Do a dry run. Don't delete any files"""
   dryRun: Boolean!
 }

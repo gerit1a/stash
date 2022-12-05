@@ -289,6 +289,7 @@
       "number_of_parallel_task_for_scan_generation_head": "Number of parallel task for scan/generation",
       "parallel_scan_head": "Parallel Scan/Generation",
       "preview_generation": "Preview Generation",
+      "sprite_generation": "Sprite Generation",
       "python_path": {
         "description": "Location of python executable. Used for script scrapers and plugins. If blank, python will be resolved from the environment",
         "heading": "Python Path"
@@ -717,6 +718,17 @@
       "preview_seg_count_head": "Number of segments in preview",
       "preview_seg_duration_desc": "Duration of each preview segment, in seconds.",
       "preview_seg_duration_head": "Preview segment duration",
+      "sprite_generation": {
+        "sprite_generation_heading": "Sprite Generation Options",
+        "width_px_landscape_head": "Landscape Sprite Width (Pixels)",
+        "width_px_landscape_body": "Number of pixels wide each sprite should be for a landscape video",
+        "width_px_portrait_head": "Portrait Sprite Width (Pixels)",
+        "width_px_portrait_body": "Number of pixels wide each sprite should be for a portrait video",
+        "chunk_interval_seconds_head": "Sprite Image Interval in Seconds",
+        "chunk_interval_seconds_body": "Interval in seconds between each sprite image",
+        "chunk_minimum_head": "Minimum Sprite Images",
+        "chunk_minimum_body": "Minimum number of sprite chunks to generate for a video"
+      },
       "sprites": "Scene Scrubber Sprites",
       "sprites_tooltip": "Sprites (for the scene scrubber)",
       "transcodes": "Transcodes",

@@ -19,6 +19,10 @@ fragment ConfigGeneralData on ConfigGeneralResult {
   previewExcludeStart
   previewExcludeEnd
   previewPreset
+  spriteWidthPxLandscape
+  spriteWidthPxPortrait
+  spriteChunkIntervalSeconds
+  spriteChunkMinimum
   maxTranscodeSize
   maxStreamingTranscodeSize
   writeImageThumbnails
@@ -163,6 +167,12 @@ fragment ConfigDefaultSettingsData on ConfigDefaultSettingsResult {
       previewExcludeStart
       previewExcludeEnd
       previewPreset
+    }
+    spriteOptions {
+      spriteWidthPxLandscape
+      spriteWidthPxPortrait
+      spriteChunkIntervalSeconds
+      spriteChunkMinimum
     }
     markers
     markerImagePreviews

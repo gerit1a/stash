@@ -34,6 +34,12 @@ export const GenerateDialog: React.FC<ISceneGenerateDialog> = ({
         previewSegmentDuration: 0,
         previewPreset: GQL.PreviewPreset.Slow,
       },
+      spriteOptions: {
+        spriteWidthPxLandscape: 160,
+        spriteWidthPxPortrait: 80,
+        spriteChunkIntervalSeconds: 10,
+        spriteChunkMinimum: 25,
+      },
     };
   }
 
@@ -78,6 +84,21 @@ export const GenerateDialog: React.FC<ISceneGenerateDialog> = ({
             existing.previewOptions?.previewExcludeEnd,
           previewPreset:
             general.previewPreset ?? existing.previewOptions?.previewPreset,
+        },
+        spriteOptions: {
+          ...existing.spriteOptions,
+          spriteWidthPxLandscape:
+            general.spriteWidthPxLandscape ??
+            existing.spriteOptions?.spriteWidthPxLandscape,
+          spriteWidthPxPortrait:
+            general.spriteWidthPxPortrait ??
+            existing.spriteOptions?.spriteWidthPxPortrait,
+          spriteChunkIntervalSeconds:
+            general.spriteChunkIntervalSeconds ??
+            existing.spriteOptions?.spriteChunkIntervalSeconds,
+          spriteChunkMinimum:
+            general.spriteChunkMinimum ??
+            existing.spriteOptions?.spriteChunkMinimum,
         },
       }));
       setConfigRead(true);

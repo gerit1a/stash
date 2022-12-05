@@ -229,6 +229,37 @@ func (j *GenerateJob) queueTasks(ctx context.Context, g *generate.Generator, que
 	return totals
 }
 
+func getGenerateSpriteOptions(optionsInput models.GenerateSpriteOptionsInput) models.GenerateSpriteOptions {
+	config := config.GetInstance()
+
+	spriteWidthPxLandscape := config.GetSpriteWidthPxLandscape()
+	spriteWidthPxPortrait := config.GetSpriteWidthPxPortrait()
+	spriteChunkIntervalSeconds := config.GetSpriteChunkIntervalSeconds()
+	spriteChunkMinimum := config.GetSpriteChunkMinimum()
+
+	ret := models.GenerateSpriteOptions{
+		SpriteWidthPxLandscape:     &spriteWidthPxLandscape,
+		SpriteWidthPxPortrait:      &spriteWidthPxPortrait,
+		SpriteChunkIntervalSeconds: &spriteChunkIntervalSeconds,
+		SpriteChunkMinimum:         &spriteChunkMinimum,
+	}
+
+	if optionsInput.SpriteWidthPxLandscape != nil {
+		ret.SpriteWidthPxLandscape = optionsInput.SpriteWidthPxLandscape
+	}
+	if optionsInput.SpriteWidthPxPortrait != nil {
+		ret.SpriteWidthPxPortrait = optionsInput.SpriteWidthPxPortrait
+	}
+	if optionsInput.SpriteChunkIntervalSeconds != nil {
+		ret.SpriteChunkIntervalSeconds = optionsInput.SpriteChunkIntervalSeconds
+	}
+	if optionsInput.SpriteChunkMinimum != nil {
+		ret.SpriteChunkMinimum = optionsInput.SpriteChunkMinimum
+	}
+
+	return ret
+}
+
 func getGeneratePreviewOptions(optionsInput GeneratePreviewOptionsInput) generate.PreviewOptions {
 	config := config.GetInstance()
 
@@ -266,10 +297,16 @@ func getGeneratePreviewOptions(optionsInput GeneratePreviewOptionsInput) generat
 
 func (j *GenerateJob) queueSceneJobs(ctx context.Context, g *generate.Generator, scene *models.Scene, queue chan<- Task, totals *totalsGenerate) {
 	if utils.IsTrue(j.input.Sprites) {
+		generateSpriteOptions := j.input.SpriteOptions
+		if generateSpriteOptions == nil {
+			generateSpriteOptions = &models.GenerateSpriteOptionsInput{}
+		}
+		options := getGenerateSpriteOptions(*generateSpriteOptions)
 		task := &GenerateSpriteTask{
 			Scene:               *scene,
 			Overwrite:           j.overwrite,
 			fileNamingAlgorithm: j.fileNamingAlgo,
+			Options:             options,
 		}
 
 		if j.overwrite || task.required() {
