@@ -42,6 +42,8 @@ func NewSpriteGenerator(videoFile ffmpeg.VideoFile, videoChecksum string, imageO
 	chunkCount := int(math.Floor(videoFile.Duration / float64(*options.SpriteChunkIntervalSeconds)))
 	if chunkCount < *options.SpriteChunkMinimum {
 		chunkCount = *options.SpriteChunkMinimum
+	} else if *options.SpriteChunkMaximum != 0 && chunkCount > *options.SpriteChunkMaximum {
+		chunkCount = *options.SpriteChunkMaximum
 	}
 	cols := int(math.Ceil(math.Sqrt(float64(chunkCount))))
 	rows := int(math.Ceil(float64(chunkCount) / float64(cols)))

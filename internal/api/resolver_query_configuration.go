@@ -104,6 +104,7 @@ func makeConfigGeneralResult() *ConfigGeneralResult {
 		SpriteWidthPxPortrait:        config.GetSpriteWidthPxPortrait(),
 		SpriteChunkIntervalSeconds:   config.GetSpriteChunkIntervalSeconds(),
 		SpriteChunkMinimum:           config.GetSpriteChunkMinimum(),
+		SpriteChunkMaximum:           config.GetSpriteChunkMaximum(),
 		MaxTranscodeSize:             &maxTranscodeSize,
 		MaxStreamingTranscodeSize:    &maxStreamingTranscodeSize,
 		WriteImageThumbnails:         config.IsWriteImageThumbnails(),

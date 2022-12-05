@@ -106,6 +106,7 @@ export const LibraryTasks: React.FC = () => {
         spriteWidthPxPortrait: 80,
         spriteChunkIntervalSeconds: 10,
         spriteChunkMinimum: 25,
+        spriteChunkMaximum: 0,
       },
     };
   }
@@ -177,6 +178,9 @@ export const LibraryTasks: React.FC = () => {
             spriteChunkMinimum:
               general.spriteChunkMinimum ??
               existing.spriteOptions?.spriteChunkMinimum,
+            spriteChunkMaximum:
+              general.spriteChunkMaximum ??
+              existing.spriteOptions?.spriteChunkMaximum,
           },
         }));
       }

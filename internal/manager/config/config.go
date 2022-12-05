@@ -88,6 +88,8 @@ const (
 	spriteChunkIntervalSecondsDefault = 10
 	SpriteChunkMinimum                = "sprite_chunk_minimum"
 	spriteChunkMinimumDefault         = 25
+	SpriteChunkMaximum                = "sprite_chunk_maximum"
+	spriteChunkMaximumDefault         = 0
 
 	WriteImageThumbnails        = "write_image_thumbnails"
 	writeImageThumbnailsDefault = true
@@ -792,6 +794,11 @@ func (i *Instance) GetSpriteChunkMinimum() int {
 	return i.getInt(SpriteChunkMinimum)
 }
 
+// GetSpriteChunkMaximum returns the maximum number of sprite chunks.
+func (i *Instance) GetSpriteChunkMaximum() int {
+	return i.getInt(SpriteChunkMaximum)
+}
+
 func (i *Instance) GetMaxTranscodeSize() models.StreamingResolutionEnum {
 	ret := i.getString(MaxTranscodeSize)
 
@@ -1402,6 +1409,7 @@ func (i *Instance) setDefaultValues(write bool) error {
 	i.main.SetDefault(SpriteWidthPxPortrait, spriteWidthPxPortraitDefault)
 	i.main.SetDefault(SpriteChunkIntervalSeconds, spriteChunkIntervalSecondsDefault)
 	i.main.SetDefault(SpriteChunkMinimum, spriteChunkMinimumDefault)
+	i.main.SetDefault(SpriteChunkMaximum, spriteChunkMaximumDefault)
 
 	i.main.SetDefault(SoundOnPreview, false)
 	i.main.SetDefault(PrivacyKeyboardCustomization, privacyKeyboardCustomizationDefault)

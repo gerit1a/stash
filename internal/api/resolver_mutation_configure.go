@@ -192,6 +192,9 @@ func (r *mutationResolver) ConfigureGeneral(ctx context.Context, input ConfigGen
 	if input.SpriteChunkMinimum != nil {
 		c.Set(config.SpriteChunkMinimum, *input.SpriteChunkMinimum)
 	}
+	if input.SpriteChunkMaximum != nil {
+		c.Set(config.SpriteChunkMaximum, *input.SpriteChunkMaximum)
+	}
 
 	if input.MaxTranscodeSize != nil {
 		c.Set(config.MaxTranscodeSize, input.MaxTranscodeSize.String())

@@ -236,12 +236,14 @@ func getGenerateSpriteOptions(optionsInput models.GenerateSpriteOptionsInput) mo
 	spriteWidthPxPortrait := config.GetSpriteWidthPxPortrait()
 	spriteChunkIntervalSeconds := config.GetSpriteChunkIntervalSeconds()
 	spriteChunkMinimum := config.GetSpriteChunkMinimum()
+	spriteChunkMaximum := config.GetSpriteChunkMaximum()
 
 	ret := models.GenerateSpriteOptions{
 		SpriteWidthPxLandscape:     &spriteWidthPxLandscape,
 		SpriteWidthPxPortrait:      &spriteWidthPxPortrait,
 		SpriteChunkIntervalSeconds: &spriteChunkIntervalSeconds,
 		SpriteChunkMinimum:         &spriteChunkMinimum,
+		SpriteChunkMaximum:         &spriteChunkMaximum,
 	}
 
 	if optionsInput.SpriteWidthPxLandscape != nil {
@@ -255,6 +257,9 @@ func getGenerateSpriteOptions(optionsInput models.GenerateSpriteOptionsInput) mo
 	}
 	if optionsInput.SpriteChunkMinimum != nil {
 		ret.SpriteChunkMinimum = optionsInput.SpriteChunkMinimum
+	}
+	if optionsInput.SpriteChunkMaximum != nil {
+		ret.SpriteChunkMaximum = optionsInput.SpriteChunkMaximum
 	}
 
 	return ret

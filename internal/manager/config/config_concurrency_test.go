@@ -69,6 +69,7 @@ func TestConcurrentConfigAccess(t *testing.T) {
 				i.Set(SpriteWidthPxPortrait, i.GetSpriteWidthPxPortrait())
 				i.Set(SpriteChunkIntervalSeconds, i.GetSpriteChunkIntervalSeconds())
 				i.Set(SpriteChunkMinimum, i.GetSpriteChunkMinimum())
+				i.Set(SpriteChunkMaximum, i.GetSpriteChunkMaximum())
 				i.Set(MaxTranscodeSize, i.GetMaxTranscodeSize())
 				i.Set(MaxStreamingTranscodeSize, i.GetMaxStreamingTranscodeSize())
 				i.Set(ApiKey, i.GetAPIKey())

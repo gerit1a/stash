@@ -9,6 +9,7 @@ export type SpriteGenerationSettingsInput = Pick<
   | "spriteWidthPxPortrait"
   | "spriteChunkIntervalSeconds"
   | "spriteChunkMinimum"
+  | "spriteChunkMaximum"
 >;
 
 interface ISpriteGenerationInput {
@@ -34,6 +35,7 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
     spriteWidthPxPortrait,
     spriteChunkIntervalSeconds,
     spriteChunkMinimum,
+    spriteChunkMaximum,
   } = value;
 
   return (
@@ -47,7 +49,7 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
         <Form.Control
           className="text-input"
           type="number"
-          value={spriteWidthPxLandscape?.toString() ?? 1}
+          value={spriteWidthPxLandscape?.toString() ?? 160}
           min={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             set({
@@ -73,7 +75,7 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
         <Form.Control
           className="text-input"
           type="number"
-          value={spriteWidthPxPortrait?.toString() ?? 1}
+          value={spriteWidthPxPortrait?.toString() ?? 80}
           min={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             set({
@@ -100,7 +102,7 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
         <Form.Control
           className="text-input"
           type="number"
-          value={spriteChunkIntervalSeconds?.toString() ?? 1}
+          value={spriteChunkIntervalSeconds?.toString() ?? 10}
           min={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             set({
@@ -127,7 +129,7 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
         <Form.Control
           className="text-input"
           type="number"
-          value={spriteChunkMinimum?.toString() ?? 1}
+          value={spriteChunkMinimum?.toString() ?? 25}
           min={1}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             set({
@@ -141,6 +143,32 @@ export const SpriteGenerationInput: React.FC<ISpriteGenerationInput> = ({
         <Form.Text className="text-muted">
           {intl.formatMessage({
             id: "dialogs.scene_gen.sprite_generation.chunk_minimum_body",
+          })}
+        </Form.Text>
+      </Form.Group>
+      <Form.Group id="chunk-maximum">
+        <h6>
+          {intl.formatMessage({
+            id: "dialogs.scene_gen.sprite_generation.chunk_maximum_head",
+          })}
+        </h6>
+        <Form.Control
+          className="text-input"
+          type="number"
+          value={spriteChunkMaximum?.toString() ?? 0}
+          min={0}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            set({
+              spriteChunkMaximum: Number.parseInt(
+                e.currentTarget.value || "0",
+                10
+              ),
+            })
+          }
+        />
+        <Form.Text className="text-muted">
+          {intl.formatMessage({
+            id: "dialogs.scene_gen.sprite_generation.chunk_maximum_body",
           })}
         </Form.Text>
       </Form.Group>

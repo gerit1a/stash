@@ -727,7 +727,9 @@
         "chunk_interval_seconds_head": "Sprite Image Interval in Seconds",
         "chunk_interval_seconds_body": "Interval in seconds between each sprite image",
         "chunk_minimum_head": "Minimum Sprite Images",
-        "chunk_minimum_body": "Minimum number of sprite chunks to generate for a video"
+        "chunk_minimum_body": "Minimum number of sprite chunks to generate for a video",
+        "chunk_maximum_head": "Maximum Sprite Images",
+        "chunk_maximum_body": "Maximum number of sprite chunks to generate for a video. Set to 0 for no maximum."
       },
       "sprites": "Scene Scrubber Sprites",
       "sprites_tooltip": "Sprites (for the scene scrubber)",

@@ -73,6 +73,8 @@ input ConfigGeneralInput {
   spriteChunkIntervalSeconds: Int
   """Minimum number of sprites to generate"""
   spriteChunkMinimum: Int
+  """Maximum number of sprites to generate, 0 for unlimited"""
+  spriteChunkMaximum: Int
   """Max generated transcode size"""
   maxTranscodeSize: StreamingResolutionEnum
   """Max streaming transcode size"""
@@ -164,6 +166,8 @@ type ConfigGeneralResult {
   spriteChunkIntervalSeconds: Int!
   """Minimum number of sprites to generate"""
   spriteChunkMinimum: Int!
+  """Maximum number of sprites to generate, 0 for unlimited"""
+  spriteChunkMaximum: Int!
   """Max generated transcode size"""
   maxTranscodeSize: StreamingResolutionEnum
   """Max streaming transcode size"""

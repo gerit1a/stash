@@ -298,6 +298,7 @@ export const SettingsConfigurationPanel: React.FC = () => {
             spriteWidthPxPortrait: general.spriteWidthPxPortrait,
             spriteChunkIntervalSeconds: general.spriteChunkIntervalSeconds,
             spriteChunkMinimum: general.spriteChunkMinimum,
+            spriteChunkMaximum: general.spriteChunkMaximum,
           }}
           onChange={(v) => saveGeneral(v)}
           renderField={(value, setValue) => (

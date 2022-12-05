@@ -46,6 +46,8 @@ input GenerateSpriteOptionsInput {
   spriteChunkIntervalSeconds: Int
   """Minimum number of sprites to generate"""
   spriteChunkMinimum: Int
+  """Maximum number of sprites to generate, 0 for unlimited"""
+  spriteChunkMaximum: Int
 }
 
 type GenerateMetadataOptions {
@@ -84,6 +86,8 @@ type GenerateSpriteOptions {
   spriteChunkIntervalSeconds: Int
   """Minimum number of sprites to generate"""
   spriteChunkMinimum: Int
+  """Maximum number of sprites to generate, 0 for unlimited"""
+  spriteChunkMaximum: Int
 }
 
 "Filter options for meta data scannning"
