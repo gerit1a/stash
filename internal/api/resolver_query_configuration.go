@@ -143,6 +143,7 @@ func makeConfigInterfaceResult() *ConfigInterfaceResult {
 	privacyKeyboardCustomization := config.GetPrivacyKeyboardCustomization()
 	privacyShowTitle := config.GetPrivacyShowTitle()
 	videoBackgroundPlayback := config.GetVideoBackgroundPlayback()
+	videoSeekSeconds := config.GetVideoSeekSeconds()
 	css := config.GetCSS()
 	cssEnabled := config.GetCSSEnabled()
 	customLocales := config.GetCustomLocales()
@@ -170,6 +171,7 @@ func makeConfigInterfaceResult() *ConfigInterfaceResult {
 		PrivacyKeyboardCustomization: &privacyKeyboardCustomization,
 		PrivacyShowTitle:             &privacyShowTitle,
 		VideoBackgroundPlayback:      &videoBackgroundPlayback,
+		VideoSeekSeconds:             &videoSeekSeconds,
 		CSS:                          &css,
 		CSSEnabled:                   &cssEnabled,
 		CustomLocales:                &customLocales,

@@ -1,5 +1,9 @@
 import videojs, { VideoJsPlayer } from "video.js";
 
+interface ITouchControlsOptions {
+  videoSeekSeconds?: number;
+}
+
 const IBigPlayButton = videojs.getComponent("BigPlayButton");
 
 class BigPlayPauseButton extends IBigPlayButton {
@@ -50,13 +54,15 @@ class BigButtonGroup extends videojs.getComponent("Component") {
 
 class touchControls extends videojs.getPlugin("plugin") {
   timer: NodeJS.Timeout | null = null;
-  bigButtonGroup: BigButtonGroup | undefined;
+  bigButtonGroup?: BigButtonGroup;
+  videoSeekSeconds: number = 5;
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  constructor(player: VideoJsPlayer, options: any) {
+  constructor(player: VideoJsPlayer, options: ITouchControlsOptions) {
     super(player, options);
 
-    this.bigButtonGroup = player.getChild("BigButtonGroup");
+    this.bigButtonGroup = player.addChild("BigButtonGroup");
+    this.videoSeekSeconds = options.videoSeekSeconds ?? 5;
     if (!videojs.browser.TOUCH_ENABLED || !this.bigButtonGroup) {
       return;
     }
@@ -75,7 +81,7 @@ class touchControls extends videojs.getPlugin("plugin") {
     const touchLocation = event.changedTouches[0]?.clientX;
     const touchPercent = touchLocation / playerWidth;
 
-    if (this.timer == null) {
+    if (this.timer === null) {
       this.timer = setTimeout(() => {
         this.timer = null;
       }, 250);
@@ -86,30 +92,26 @@ class touchControls extends videojs.getPlugin("plugin") {
 
     if (touchPercent > 0.65) {
       this.bigButtonGroup?.trigger({ type: "display", direction: "forward" });
-      this.player.currentTime(this.player.currentTime() + 10);
+      this.player.currentTime(
+        this.player.currentTime() + this.videoSeekSeconds
+      );
     } else if (touchPercent < 0.35) {
       this.bigButtonGroup?.trigger({ type: "display", direction: "backward" });
-      this.player.currentTime(Math.max(0, this.player.currentTime() - 10));
+      this.player.currentTime(
+        Math.max(0, this.player.currentTime() - this.videoSeekSeconds)
+      );
     }
   }
 }
 
-const bigButtons = function (this: VideoJsPlayer) {
-  this.addChild("BigButtonGroup");
-};
-
 // Register the plugin with video.js.
 videojs.registerComponent("BigButtonGroup", BigButtonGroup);
 videojs.registerComponent("BigPlayPauseButton", BigPlayPauseButton);
-videojs.registerPlugin("bigButtons", bigButtons);
 videojs.registerPlugin("touchControls", touchControls);
 
 declare module "video.js" {
   /* eslint-disable-next-line @typescript-eslint/naming-convention */
   export interface VideoJsPlayer {
-    bigButtons: () => typeof bigButtons;
-    touchControls: () => touchControls;
+    touchControls: (options: ITouchControlsOptions) => touchControls;
   }
 }
-
-export default bigButtons;

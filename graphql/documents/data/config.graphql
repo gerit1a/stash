@@ -64,6 +64,7 @@ fragment ConfigInterfaceData on ConfigInterfaceResult {
   privacyKeyboardCustomization
   privacyShowTitle
   videoBackgroundPlayback
+  videoSeekSeconds
   css
   cssEnabled
   customLocales

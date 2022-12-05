@@ -368,6 +368,10 @@ func (r *mutationResolver) ConfigureInterface(ctx context.Context, input ConfigI
 	setBool(config.PrivacyShowTitle, input.PrivacyShowTitle)
 	setBool(config.VideoBackgroundPlayback, input.VideoBackgroundPlayback)
 
+	if input.VideoSeekSeconds != nil {
+		c.Set(config.VideoSeekSeconds, *input.VideoSeekSeconds)
+	}
+
 	if input.CSS != nil {
 		c.SetCSS(*input.CSS)
 	}

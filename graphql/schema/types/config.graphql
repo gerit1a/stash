@@ -269,6 +269,9 @@ input ConfigInterfaceInput {
   """If true, allow the video the play in the background"""
   videoBackgroundPlayback: Boolean
   
+  """Number of seconds to seek forward/backward when using the seek buttons"""
+  videoSeekSeconds: Int
+
   """Custom CSS"""
   css: String
   cssEnabled: Boolean
@@ -343,6 +346,9 @@ type ConfigInterfaceResult {
 
   """If true, allow the video the play in the background"""
   videoBackgroundPlayback: Boolean
+
+  """Number of seconds to seek forward/backward when using the seek buttons"""
+  videoSeekSeconds: Int
 
   """Custom CSS"""
   css: String

@@ -18,7 +18,7 @@ import "./PlaylistButtons";
 import "./source-selector";
 import "./persist-volume";
 import "./markers";
-import "./big-buttons";
+import "./touch-controls";
 import cx from "classnames";
 
 import * as GQL from "src/core/generated-graphql";
@@ -32,7 +32,12 @@ import { SceneInteractiveStatus } from "src/hooks/Interactive/status";
 import { languageMap } from "src/utils/caption";
 import { VIDEO_PLAYER_ID } from "./util";
 
-function handleHotkeys(player: VideoJsPlayer, event: VideoJS.KeyboardEvent) {
+function handleHotkeys(
+  player: VideoJsPlayer,
+  event: VideoJS.KeyboardEvent,
+  config?: GQL.ConfigInterfaceDataFragment
+) {
+  const seekSeconds = config?.videoSeekSeconds ?? 5;
   function seekPercent(percent: number) {
     const duration = player.duration();
     const time = duration * percent;
@@ -66,10 +71,12 @@ function handleHotkeys(player: VideoJsPlayer, event: VideoJS.KeyboardEvent) {
       else player.requestFullscreen();
       break;
     case 39: // right arrow
-      player.currentTime(Math.min(player.duration(), player.currentTime() + 5));
+      player.currentTime(
+        Math.min(player.duration(), player.currentTime() + seekSeconds)
+      );
       break;
     case 37: // left arrow
-      player.currentTime(Math.max(0, player.currentTime() - 5));
+      player.currentTime(Math.max(0, player.currentTime() - seekSeconds));
       break;
     case 38: // up arrow
       player.volume(player.volume() + 0.1);
@@ -214,7 +221,7 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
       userActions: {
         hotkeys: function (event) {
           const player = this as VideoJsPlayer;
-          handleHotkeys(player, event);
+          handleHotkeys(player, event, config);
         },
         // prevents touch from triggering play/pause in weird circumstances
         // @ts-ignore click isn't defined for some reason
@@ -246,12 +253,13 @@ export const ScenePlayer: React.FC<IScenePlayerProps> = ({
     player.seekHandler();
     (player as any).sourceSelector();
     (player as any).persistVolume();
-    player.bigButtons();
-    player.touchControls();
+    player.touchControls({
+      videoSeekSeconds: config?.videoSeekSeconds ?? 5,
+    });
 
     player.focus();
     playerRef.current = player;
-  }, [isTouch]);
+  }, [config, isTouch]);
 
   useEffect(() => {
     if (scene?.interactive && interactiveInitialised) {

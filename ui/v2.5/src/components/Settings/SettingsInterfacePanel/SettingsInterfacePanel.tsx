@@ -262,6 +262,25 @@ export const SettingsInterfacePanel: React.FC = () => {
             return <span>{DurationUtils.secondsToString(v ?? 0)}</span>;
           }}
         />
+
+        <ModalSetting<number>
+          headingID="config.ui.scene_player.options.video_seek_seconds.heading"
+          subHeadingID="config.ui.scene_player.options.video_seek_seconds.description"
+          value={iface.videoSeekSeconds ?? undefined}
+          onChange={(v) => saveInterface({ videoSeekSeconds: v })}
+          renderField={(value, setValue) => (
+            <Form.Control
+              className="text-input"
+              type="number"
+              value={value ?? 5}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const input = Number.parseInt(e.currentTarget.value || "1", 10);
+                setValue(input > 0 ? input : 1);
+              }}
+            />
+          )}
+          renderValue={(value) => <span>{value}</span>}
+        />
       </SettingSection>
       <SettingSection headingID="config.ui.tag_panel.heading">
         <BooleanSetting

@@ -87,6 +87,7 @@ func TestConcurrentConfigAccess(t *testing.T) {
 				i.Set(PrivacyKeyboardCustomization, i.GetPrivacyKeyboardCustomization())
 				i.Set(PrivacyShowTitle, i.GetPrivacyShowTitle())
 				i.Set(VideoBackgroundPlayback, i.GetVideoBackgroundPlayback())
+				i.Set(VideoSeekSeconds, i.GetVideoSeekSeconds())
 				i.GetCSSPath()
 				i.GetCSS()
 				i.GetCustomLocalesPath()

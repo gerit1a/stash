@@ -144,6 +144,8 @@ const (
 	privacyShowTitleDefault             = false
 	VideoBackgroundPlayback             = "video_background_playback"
 	videoBackgroundPlaybackDefault      = true
+	VideoSeekSeconds                    = "video_seek_seconds"
+	videoSeekSecondsDefault             = 5
 	CSSEnabled                          = "cssEnabled"
 	CustomLocalesEnabled                = "customLocalesEnabled"
 
@@ -1052,6 +1054,10 @@ func (i *Instance) GetVideoBackgroundPlayback() bool {
 	return i.getBool(VideoBackgroundPlayback)
 }
 
+func (i *Instance) GetVideoSeekSeconds() int {
+	return i.getInt(VideoSeekSeconds)
+}
+
 func (i *Instance) GetCSSPath() string {
 	// use custom.css in the same directory as the config file
 	configFileUsed := i.GetConfigFile()
@@ -1366,6 +1372,7 @@ func (i *Instance) setDefaultValues(write bool) error {
 	i.main.SetDefault(PrivacyKeyboardCustomization, privacyKeyboardCustomizationDefault)
 	i.main.SetDefault(PrivacyShowTitle, privacyShowTitleDefault)
 	i.main.SetDefault(VideoBackgroundPlayback, videoBackgroundPlaybackDefault)
+	i.main.SetDefault(VideoSeekSeconds, videoSeekSecondsDefault)
 
 	i.main.SetDefault(ThemeColor, DefaultThemeColor)
 
