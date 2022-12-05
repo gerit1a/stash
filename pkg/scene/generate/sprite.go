@@ -102,17 +102,19 @@ func (g Generator) spriteVTT(spritePath string, stepSize float64, spriteRows int
 			return err
 		}
 		width := image.Width / spriteCols
-		height := image.Height / spriteRows
+		height := (image.Height / spriteRows)
 
+		// some pixels on the edge of the sprite from other frames appear
+		// crop the height down 1 and move the sprite down 1 pixel to remove them
 		vttLines := []string{"WEBVTT", ""}
 		for index := 0; index < spriteChunks; index++ {
 			x := width * (index % spriteCols)
-			y := height * int(math.Floor(float64(index)/float64(spriteCols)))
+			y := (height * int(math.Floor(float64(index)/float64(spriteCols)))) + 1
 			startTime := utils.GetVTTTime(float64(index) * stepSize)
 			endTime := utils.GetVTTTime(float64(index+1) * stepSize)
 
 			vttLines = append(vttLines, startTime+" --> "+endTime)
-			vttLines = append(vttLines, fmt.Sprintf("%s#xywh=%d,%d,%d,%d", spriteImageName, x, y, width, height))
+			vttLines = append(vttLines, fmt.Sprintf("%s#xywh=%d,%d,%d,%d", spriteImageName, x, y, width, height-1))
 			vttLines = append(vttLines, "")
 		}
 		vtt := strings.Join(vttLines, "\n")
