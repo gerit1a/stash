@@ -53,9 +53,10 @@ class BigButtonGroup extends videojs.getComponent("Component") {
 }
 
 class touchControls extends videojs.getPlugin("plugin") {
-  timer: NodeJS.Timeout | null = null;
   bigButtonGroup?: BigButtonGroup;
   videoSeekSeconds: number = 5;
+  lastTouchStart: number = 0;
+  lastTouchPosition?: "left" | "right" | "center";
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   constructor(player: VideoJsPlayer, options: ITouchControlsOptions) {
@@ -73,29 +74,43 @@ class touchControls extends videojs.getPlugin("plugin") {
     this.handleTouchStart(event);
   };
 
+  getTouchPosition(touchPercent: number) {
+    if (touchPercent < 0.35) {
+      return "left";
+    } else if (touchPercent > 0.65) {
+      return "right";
+    } else {
+      return "center";
+    }
+  }
+
   handleTouchStart(event: TouchEvent) {
-    if (!this.player.hasStarted()) {
+    if (!this.player.hasStarted() || event.touches.length > 1) {
       return;
     }
     const playerWidth = this.player.el().getBoundingClientRect().width;
     const touchLocation = event.changedTouches[0]?.clientX;
     const touchPercent = touchLocation / playerWidth;
+    const touchPosition = this.getTouchPosition(touchPercent);
 
-    if (this.timer === null) {
-      this.timer = setTimeout(() => {
-        this.timer = null;
-      }, 250);
+    const currentTimeInMillis = Date.now();
+    if (
+      !(
+        touchPosition === this.lastTouchPosition &&
+        currentTimeInMillis - this.lastTouchStart < 250
+      )
+    ) {
+      this.lastTouchStart = currentTimeInMillis;
+      this.lastTouchPosition = touchPosition;
       return;
     }
-    clearTimeout(this.timer);
-    this.timer = null;
 
-    if (touchPercent > 0.65) {
+    if (touchPosition === "right") {
       this.bigButtonGroup?.trigger({ type: "display", direction: "forward" });
       this.player.currentTime(
         this.player.currentTime() + this.videoSeekSeconds
       );
-    } else if (touchPercent < 0.35) {
+    } else if (touchPosition === "left") {
       this.bigButtonGroup?.trigger({ type: "display", direction: "backward" });
       this.player.currentTime(
         Math.max(0, this.player.currentTime() - this.videoSeekSeconds)
