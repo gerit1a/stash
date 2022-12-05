@@ -411,8 +411,7 @@ export const ScenePlayerScrubber: React.FC<IScenePlayerScrubberProps> = (
         width: `${sprite.w}px`,
         height: `${sprite.h}px`,
         margin: "0px auto",
-        // -1 is needed because on mobile a pixel appears on the top of the image
-        backgroundPosition: `${-sprite.x}px ${-sprite.y - 1}px`,
+        backgroundPosition: `${-sprite.x}px ${-sprite.y}px`,
         backgroundImage: `url(${path})`,
         left: `${left}px`,
       };
