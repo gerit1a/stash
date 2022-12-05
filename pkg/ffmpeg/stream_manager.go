@@ -359,7 +359,7 @@ func (sm *StreamManager) getTranscodeArgs(probeResult *VideoFile, outputPath str
 		"-g", "60",
 		"-x264-params", "no-scenecut=1",
 		"-force_key_frames", fmt.Sprintf("expr:gte(t,n_forced*%d)", 1),
-		"-vf", "scale=iw*sar:ih,scale="+scale)
+		"-vf", "scale="+scale)
 
 	args = append(args,
 		"-c:a", "aac",

@@ -51,7 +51,6 @@ type sceneMarkerOptions struct {
 func (g Generator) markerPreviewVideo(input string, options sceneMarkerOptions) generateFn {
 	return func(lockCtx *fsutil.LockContext, tmpFn string) error {
 		var videoFilter ffmpeg.VideoFilter
-		videoFilter = videoFilter.ScaleFixDarSar()
 		videoFilter = videoFilter.ScaleWidth(markerPreviewWidth)
 
 		var videoArgs ffmpeg.Args
@@ -116,7 +115,6 @@ func (g Generator) SceneMarkerWebp(ctx context.Context, input string, hash strin
 func (g Generator) sceneMarkerWebp(input string, options sceneMarkerOptions) generateFn {
 	return func(lockCtx *fsutil.LockContext, tmpFn string) error {
 		var videoFilter ffmpeg.VideoFilter
-		videoFilter = videoFilter.ScaleFixDarSar()
 		videoFilter = videoFilter.ScaleWidth(markerPreviewWidth)
 		videoFilter = videoFilter.Fps(markerWebpFPS)
 

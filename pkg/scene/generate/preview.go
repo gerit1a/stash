@@ -174,7 +174,6 @@ type previewChunkOptions struct {
 
 func (g Generator) previewVideoChunk(lockCtx *fsutil.LockContext, fn string, options previewChunkOptions, fallback bool) error {
 	var videoFilter ffmpeg.VideoFilter
-	videoFilter = videoFilter.ScaleFixDarSar()
 	videoFilter = videoFilter.ScaleWidth(scenePreviewWidth)
 
 	var videoArgs ffmpeg.Args
@@ -280,7 +279,6 @@ func (g Generator) PreviewWebp(ctx context.Context, input string, hash string) e
 func (g Generator) previewVideoToImage(input string) generateFn {
 	return func(lockCtx *fsutil.LockContext, tmpFn string) error {
 		var videoFilter ffmpeg.VideoFilter
-		videoFilter = videoFilter.ScaleFixDarSar()
 		videoFilter = videoFilter.ScaleWidth(scenePreviewWidth)
 		videoFilter = videoFilter.Fps(scenePreviewImageFPS)
 

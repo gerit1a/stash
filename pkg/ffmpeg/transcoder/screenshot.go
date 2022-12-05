@@ -68,7 +68,6 @@ func ScreenshotTime(input string, t float64, options ScreenshotOptions) ffmpeg.A
 	var vf ffmpeg.VideoFilter
 
 	if options.Width > 0 {
-		vf = vf.ScaleFixDarSar()
 		vf = vf.ScaleWidth(options.Width)
 		args = args.VideoFilter(vf)
 	}
@@ -98,7 +97,6 @@ func ScreenshotFrame(input string, frame int, options ScreenshotOptions) ffmpeg.
 	vf = vf.Select(frame)
 
 	if options.Width > 0 {
-		vf = vf.ScaleFixDarSar()
 		vf = vf.ScaleWidth(options.Width)
 	}
 
